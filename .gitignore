@@ -1,0 +1,120 @@
+# .gitignore
+
+# .NET Core and .NET Standard
+*.[Oo]bj/
+*.[Bb]in/
+*.sw?
+*.user
+*.suo
+*.cache
+*.log
+*.tmp
+*.dll
+*.exe
+*.pdb
+*.userprefs
+*.ide
+*.csproj.user
+*.cache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Rider, ReSharper and other IDE generated folders
+.idea/
+*.sln.iml
+_ReSharper.*/
+*.resharper
+*.resharper.user
+
+# SQL Server
+*.mdf
+*.ldf
+*.bak
+*.sql
+*.db
+
+# NuGet Packages
+*.nupkg
+*.paket.*
+paket-files/
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Windows thumbnail cache
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# .NET Core CLI
+*.dll
+*.exe
+*.pdb
+*.cmd
+*.sh
+*.bat
+*.user
+*.vsconfig
+*.log
+
+# .NET Core projects
+bin/
+obj/
+
+# Class Library
+[Ff]leetManagementLibrary/bin/
+[Ff]leetManagementLibrary/obj/
+
+# FleetManagementAPI
+[Ff]leetManagementAPI/bin/
+[Ff]leetManagementAPI/obj/
+
+# Console App
+[Ff]leetManagementConsole/bin/
+[Ff]leetManagementConsole/obj/
+
+# Angular Frontend
+FE/fleetManagementApp/dist/
+FE/fleetManagementApp/tmp/
+FE/fleetManagementApp/out-tsc/
+FE/fleetManagementApp/bazel-out/
+FE/fleetManagementApp/node_modules/
+FE/fleetManagementApp/npm-debug.log
+FE/fleetManagementApp/yarn-error.log
+FE/fleetManagementApp/.angular/cache
+FE/fleetManagementApp/.sass-cache/
+FE/fleetManagementApp/connect.lock
+FE/fleetManagementApp/coverage
+FE/fleetManagementApp/libpeerconnection.log
+FE/fleetManagementApp/testem.log
+FE/fleetManagementApp/typings
+
+# Environment variables
+.env
+*.env.local
+*.env.development.local
+*.env.test.local
+*.env.production.local
