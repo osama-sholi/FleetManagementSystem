@@ -26,6 +26,9 @@
 !.vscode/extensions.json
 .history/*
 
+# Visual Studio
+.vs/
+
 # Rider, ReSharper and other IDE generated folders
 .idea/
 *.sln.iml
@@ -81,20 +84,8 @@ artifacts/
 *.log
 
 # .NET Core projects
-bin/
-obj/
-
-# Class Library
-[Ff]leetManagementLibrary/bin/
-[Ff]leetManagementLibrary/obj/
-
-# FleetManagementAPI
-[Ff]leetManagementAPI/bin/
-[Ff]leetManagementAPI/obj/
-
-# Console App
-[Ff]leetManagementConsole/bin/
-[Ff]leetManagementConsole/obj/
+**/bin/
+**/obj/
 
 # Angular Frontend
 FE/fleetManagementApp/dist/
