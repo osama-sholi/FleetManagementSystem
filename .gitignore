@@ -40,7 +40,8 @@ _ReSharper.*/
 *.mdf
 *.ldf
 *.bak
-*.sql
+BE/*.sql
+FE/*.sql
 *.db
 
 # NuGet Packages
