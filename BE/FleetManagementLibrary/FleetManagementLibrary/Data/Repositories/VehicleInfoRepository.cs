@@ -52,11 +52,29 @@ namespace FleetManagementLibrary.Data.Repositories
             // SQL query to update the vehicle info in the VehicleInformation table which has the VehicleID which refrences the vehicle table,
             // DriverID which refrences the driver table, VehicleMake, VehicleModel, PurchaseDate columns
 
-            string query =
-                "UPDATE VehiclesInformations SET DriverID = @DriverID, VehicleMake = @VehicleMake, VehicleModel = @VehicleModel, PurchaseDate = @PurchaseDate " +
-                "WHERE VehicleID = @VehicleID";
+            string query = "UPDATE VehiclesInformations SET ";
 
+            if (vehicleInfo.DriverID != 0) // To keep old value if new value is not provided
+            {
+                query += "DriverID = @DriverID, ";
+            }
 
+            if (!string.IsNullOrEmpty(vehicleInfo.VehicleMake))
+            {
+                query += "VehicleMake = @VehicleMake, ";
+            }
+
+            if (!string.IsNullOrEmpty(vehicleInfo.VehicleModel))
+            {
+                query += "VehicleModel = @VehicleModel, ";
+            }
+
+            if (vehicleInfo.PurchaseDate != 0)
+            {
+                query += "PurchaseDate = @PurchaseDate ";
+            }
+
+            query += "WHERE VehicleID = @VehicleID";
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 connection.Open();
@@ -64,10 +82,26 @@ namespace FleetManagementLibrary.Data.Repositories
                 using (NpgsqlCommand command = new NpgsqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@VehicleID", vehicleInfo.VehicleID);
-                    command.Parameters.AddWithValue("@DriverID", vehicleInfo.DriverID);
-                    command.Parameters.AddWithValue("@VehicleMake", vehicleInfo.VehicleMake);
-                    command.Parameters.AddWithValue("@VehicleModel", vehicleInfo.VehicleModel);
-                    command.Parameters.AddWithValue("@PurchaseDate", vehicleInfo.PurchaseDate);
+
+                    if (vehicleInfo.DriverID != 0)
+                    {
+                        command.Parameters.AddWithValue("@DriverID", vehicleInfo.DriverID);
+                    }
+
+                    if (!string.IsNullOrEmpty(vehicleInfo.VehicleMake))
+                    {
+                        command.Parameters.AddWithValue("@VehicleMake", vehicleInfo.VehicleMake);
+                    }
+
+                    if (!string.IsNullOrEmpty(vehicleInfo.VehicleModel))
+                    {
+                        command.Parameters.AddWithValue("@VehicleModel", vehicleInfo.VehicleModel);
+                    }
+
+                    if (vehicleInfo.PurchaseDate != 0)
+                    {
+                        command.Parameters.AddWithValue("@PurchaseDate", vehicleInfo.PurchaseDate);
+                    }
 
                     command.ExecuteNonQuery();
                 }
@@ -127,6 +161,8 @@ namespace FleetManagementLibrary.Data.Repositories
                     using (var reader = command.ExecuteReader())
                     {
                         List<AllVehiclesInfo> allVehiclesInfo = new List<AllVehiclesInfo>();
+                        float lastLatitude = Convert.ToSingle(reader["Latitude"]);
+                        float lastLongitude = Convert.ToSingle(reader["Longitude"]);
 
                         while (reader.Read())
                         {
@@ -137,8 +173,7 @@ namespace FleetManagementLibrary.Data.Repositories
                                 LastDirection = Convert.ToInt32(reader["VehicleDirection"]),
                                 LastStatus = Convert.ToChar(reader["Status"]),
                                 LastAddress = reader["Address"].ToString(),
-                                LastLatitude = Convert.ToSingle(reader["Latitude"]),
-                                LastLongitude = Convert.ToSingle(reader["Longitude"])
+                                LastPosition = (lastLatitude, lastLongitude)
                             });
                         }
 

@@ -44,7 +44,15 @@ namespace FleetManagementLibrary.Data.Repositories
             // SQL query to update an existing driver in the Drivers table based on the DriverID
 
             string query =
-                "UPDATE Driver SET DriverName = @DriverName, PhoneNumber = @PhoneNumber WHERE DriverID = @DriverID";
+                "UPDATE Driver SET ";
+
+            if (!string.IsNullOrEmpty(driver.DriverName)) // To keep old value if new value is not provided
+                query += "DriverName = @DriverName, ";
+
+            if (driver.PhoneNumber != 0)
+                query += "PhoneNumber = @PhoneNumber ";
+
+            query += "WHERE DriverID = @DriverID";
 
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
@@ -53,15 +61,16 @@ namespace FleetManagementLibrary.Data.Repositories
                 using (NpgsqlCommand command = new NpgsqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@DriverID", driver.DriverID);
-                    command.Parameters.AddWithValue("@DriverName", driver.DriverName);
-                    command.Parameters.AddWithValue("@PhoneNumber", driver.PhoneNumber);
+
+                    if (!string.IsNullOrEmpty(driver.DriverName))
+                        command.Parameters.AddWithValue("@DriverName", driver.DriverName);
+
+                    if (driver.PhoneNumber != 0)
+                        command.Parameters.AddWithValue("@PhoneNumber", driver.PhoneNumber);
 
                     command.ExecuteNonQuery();
                 }
             }
-
-
-
         }
 
         // Delete a driver from the Drivers table based on the DriverID

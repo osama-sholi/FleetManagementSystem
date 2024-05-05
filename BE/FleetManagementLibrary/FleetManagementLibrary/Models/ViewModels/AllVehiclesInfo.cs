@@ -14,7 +14,6 @@ namespace FleetManagementLibrary.Models.ViewModels
         public int LastDirection { get; set; }
         public char LastStatus { get; set; }
         public string LastAddress { get; set; }
-        public float LastLatitude { get; set; }
-        public float LastLongitude { get; set; }
+        public (float, float) LastPosition { get; set; }
     }
 }
