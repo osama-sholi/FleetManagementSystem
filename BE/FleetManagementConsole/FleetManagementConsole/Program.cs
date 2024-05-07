@@ -14,15 +14,15 @@ namespace FleetManagementConsole
 
         static void Main(string[] args)
         {
-            string connectionString = "Server=localhost;Database=osama_fms;User Id=postgres;Password=Os282974;";
+            string connectionString = "Server=localhost;Database=osama_fms;User Id=postgres;Password=282974;";
 
-            //DriverRepository driverRepository = new DriverRepository(connectionString);
+            DriverRepository driverRepository = new DriverRepository(connectionString);
             //GeofenceRepository geofenceRepository = new GeofenceRepository(connectionString);
             //RouteHistoryRepository routeHistoryRepository = new RouteHistoryRepository(connectionString);
             //VehicleInfoRepository vehicleInfoRepository = new VehicleInfoRepository(connectionString);
             //VehicleRepository vehicleRepository = new VehicleRepository(connectionString);
 
-            //Driver(driverRepository);
+            Driver(driverRepository);
             //Geofence(geofenceRepository);
             //RouteHistory(routeHistoryRepository);
             //vehicleInfo(vehicleInfoRepository);
@@ -172,7 +172,7 @@ namespace FleetManagementConsole
             foreach (var vehicleInfo in vehicleInfoRepository.GetAllVehiclesInfo())
             {
                 Console.WriteLine(
-                    $"Vehicle ID: {vehicleInfo.VehicleID}, Vehicle Number: {vehicleInfo.VehicleNumber}, Vehicle Type: {vehicleInfo.VehicleType}, Last Direction: {vehicleInfo.LastDirection}, Last Status: {vehicleInfo.LastStatus}, Last Address: {vehicleInfo.LastAddress}, Last Latitude: {vehicleInfo.LastLatitude}, Last Longitude: {vehicleInfo.LastLongitude}");
+                    $"Vehicle ID: {vehicleInfo.VehicleID}, Vehicle Number: {vehicleInfo.VehicleNumber}, Vehicle Type: {vehicleInfo.VehicleType}, Last Direction: {vehicleInfo.LastDirection}, Last Status: {vehicleInfo.LastStatus}, Last Address: {vehicleInfo.LastAddress}, Last Position: {vehicleInfo.LastPosition}");
             }
 
             Console.WriteLine("Get Vehicle Info by ID");
