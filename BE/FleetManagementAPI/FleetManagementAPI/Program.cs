@@ -13,6 +13,7 @@ if (connectionString == null)
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<GeofenceService>( String => new GeofenceService(connectionString));
 builder.Services.AddScoped<DriverService>( String => new DriverService(connectionString));
 builder.Services.AddScoped<VehicleService>( String => new VehicleService(connectionString));

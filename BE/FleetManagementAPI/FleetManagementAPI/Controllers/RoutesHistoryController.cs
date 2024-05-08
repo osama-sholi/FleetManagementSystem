@@ -1,6 +1,7 @@
 ﻿using FleetManagementAPI.Services;
 using FPro;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace FleetManagementAPI.Controllers
 {
@@ -15,12 +16,14 @@ namespace FleetManagementAPI.Controllers
             _routesHistoryService = routesHistoryService;
         }
 
-        [HttpGet("{vehicleId}, {startDate}, {endDate}")]
+        [HttpGet("{vehicleId}/{startDate}/{endDate}")]
         public IActionResult GetRoutesHistory(long vehicleId, long startDate, long endDate)
         {
             try
             {
-                return Ok(_routesHistoryService.GetVehicleRouteHistory(vehicleId, startDate, endDate));
+                var routesHistory = _routesHistoryService.GetVehicleRouteHistory(vehicleId, startDate, endDate);
+                var json = JsonConvert.SerializeObject(routesHistory);
+                return Ok(json);
             }
             catch (System.Exception ex)
             {

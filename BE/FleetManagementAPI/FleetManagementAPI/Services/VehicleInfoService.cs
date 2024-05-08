@@ -1,7 +1,7 @@
 ﻿using FleetManagementLibrary.Data.Repositories;
 using FleetManagementLibrary.Models.Entities;
-using FleetManagementLibrary.Models.ViewModels;
 using FPro;
+using System.Data;
 
 namespace FleetManagementAPI.Services
 {
@@ -18,6 +18,18 @@ namespace FleetManagementAPI.Services
             GVAR gvar = new GVAR();
 
             var vehicleInfo = _vehicleInfoRepository.GetVehicleInfo(vehicleId);
+
+            if (vehicleInfo == null)
+            {
+                throw new Exception("Vehicle info not found");
+            }
+
+            if (vehicleInfo == null)
+            {
+                throw new Exception("Vehicle not found");
+            }
+
+            gvar.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
 
             gvar.DicOfDic["Tags"]["VehicleType"] = vehicleInfo.VehicleType;
             gvar.DicOfDic["Tags"]["DriverName"] = vehicleInfo.DriverName;
@@ -38,6 +50,24 @@ namespace FleetManagementAPI.Services
 
             var vehiclesInfo = _vehicleInfoRepository.GetAllVehiclesInfo();
 
+            if (vehiclesInfo == null || vehiclesInfo.Count == 0)
+            {
+                throw new Exception("No vehicles info found");
+            }
+
+            gvar.DicOfDT["VehiclesInfo"] = new DataTable();
+
+            gvar.DicOfDT["VehiclesInfo"].Columns.AddRange(new DataColumn[]
+            {
+                new DataColumn("VehicleID", typeof(long)),
+                new DataColumn("VehicleNumber", typeof(string)),
+                new DataColumn("VehicleType", typeof(string)),
+                new DataColumn("LastDirection", typeof(string)),
+                new DataColumn("LastStatus", typeof(string)),
+                new DataColumn("LastAddress", typeof(string)),
+                new DataColumn("LastPosition", typeof(string))
+            });
+
             foreach (var vehicleInfo in vehiclesInfo)
             {
                 var row = gvar.DicOfDT["VehiclesInfo"].NewRow();
@@ -48,6 +78,8 @@ namespace FleetManagementAPI.Services
                 row["LastStatus"] = vehicleInfo.LastStatus;
                 row["LastAddress"] = vehicleInfo.LastAddress;
                 row["LastPosition"] = vehicleInfo.LastPosition;
+
+                gvar.DicOfDT["VehiclesInfo"].Rows.Add(row);
             }
             return gvar;
         }

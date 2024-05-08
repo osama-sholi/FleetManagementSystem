@@ -16,13 +16,15 @@ namespace FleetManagementAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddDriver([FromBody] GVAR gvar)
+        public IActionResult AddDriver([FromBody]GVAR gvar)
         {
             try
             {
                 _driverService.AddDriver(gvar);
                 return Ok("Driver added successfully");
             }
+
+
             catch (System.Exception ex)
             {
                 return BadRequest(ex.Message);
@@ -56,7 +58,7 @@ namespace FleetManagementAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        
+
     }
 
 }

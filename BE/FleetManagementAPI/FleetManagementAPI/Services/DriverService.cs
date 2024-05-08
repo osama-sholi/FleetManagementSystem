@@ -2,10 +2,9 @@
 using FleetManagementLibrary.Models.Entities;
 using FleetManagementLibrary.Data.Repositories;
 
-
 namespace FleetManagementAPI.Services
 {
-    
+
     public class DriverService
     {
         private readonly DriverRepository _driverRepository;
@@ -16,6 +15,7 @@ namespace FleetManagementAPI.Services
 
         public void AddDriver(GVAR gvar)
         {
+            Console.WriteLine(gvar.DicOfDic.Count);
             Driver driver = new Driver()
             {
                 DriverName = gvar.DicOfDic["Tags"]["DriverName"],

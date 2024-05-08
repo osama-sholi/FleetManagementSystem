@@ -1,5 +1,7 @@
 ﻿using FleetManagementAPI.Services;
+using FPro;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace FleetManagementAPI.Controllers
 {
@@ -19,10 +21,13 @@ namespace FleetManagementAPI.Controllers
         {
             try
             {
-                return Ok(_geofenceService.GetGeofences());
+                GVAR gvar = _geofenceService.GetGeofences();
+                String json = JsonConvert.SerializeObject(gvar);
+                return Ok(json);
             }
             catch (System.Exception ex)
             {
+                Console.WriteLine(ex);
                 return BadRequest(ex.Message);
             }
 
@@ -33,7 +38,9 @@ namespace FleetManagementAPI.Controllers
         {
             try
             {
-                return Ok(_geofenceService.GetCircularGeofences());
+                GVAR gvar = _geofenceService.GetCircularGeofences();
+                String json = JsonConvert.SerializeObject(gvar);
+                return Ok(json);
             }
             catch (System.Exception ex)
             {
@@ -46,7 +53,9 @@ namespace FleetManagementAPI.Controllers
         {
             try
             {
-                return Ok(_geofenceService.GetRectangularGeofences());
+                GVAR gvar = _geofenceService.GetRectangularGeofences();
+                String json = JsonConvert.SerializeObject(gvar);
+                return Ok(json);
             }
             catch (System.Exception ex)
             {
@@ -59,7 +68,9 @@ namespace FleetManagementAPI.Controllers
         {
             try
             {
-                return Ok(_geofenceService.GetPolygonGeofences());
+                GVAR gvar = _geofenceService.GetPolygonGeofences();
+                String json = JsonConvert.SerializeObject(gvar);
+                return Ok(json);
             }
             catch (System.Exception ex)
             {

@@ -117,9 +117,9 @@ namespace FleetManagementLibrary.Data.Repositories
                         {
                             Driver driver = new Driver
                             {
-                                DriverID = reader.GetInt64(0),
-                                DriverName = reader.GetString(1),
-                                PhoneNumber = reader.GetInt64(2)
+                                DriverID = Convert.ToInt64(reader["DriverID"]),
+                                DriverName = reader["DriverName"].ToString(),
+                                PhoneNumber = Convert.ToInt64(reader["PhoneNumber"])
                             };
 
                             drivers.Add(driver);

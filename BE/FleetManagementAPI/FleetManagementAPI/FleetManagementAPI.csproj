@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
@@ -15,7 +16,7 @@
       <HintPath>..\..\FleetManagementLibrary\FleetManagementLibrary\bin\Debug\FleetManagementLibrary.dll</HintPath>
     </Reference>
     <Reference Include="FPro">
-      <HintPath>..\..\..\GVAR\FPro.dll</HintPath>
+      <HintPath>..\..\FPro\FPro\bin\Debug\FPro.dll</HintPath>
     </Reference>
   </ItemGroup>
 

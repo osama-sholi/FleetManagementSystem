@@ -1,6 +1,8 @@
 ﻿using FleetManagementAPI.Services;
 using FPro;
 using Microsoft.AspNetCore.Mvc;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
 
 namespace FleetManagementAPI.Controllers
 {
@@ -20,7 +22,9 @@ namespace FleetManagementAPI.Controllers
         {
             try
             {
-                return Ok(_vehicleInfoService.GetVehicleInfo(vehicleId));
+                GVAR gvar = _vehicleInfoService.GetVehicleInfo(vehicleId);
+                String json = JsonConvert.SerializeObject(gvar);
+                return Ok(json);
             }
             catch (System.Exception ex)
             {
@@ -33,15 +37,19 @@ namespace FleetManagementAPI.Controllers
         {
             try
             {
-                return Ok(_vehicleInfoService.GetAllVehiclesInfo());
+                GVAR gvar = _vehicleInfoService.GetAllVehiclesInfo();
+                String json = JsonConvert.SerializeObject(gvar);
+                return Ok(json);
             }
             catch (System.Exception ex)
             {
+                Console.WriteLine(ex);
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpPost]
+
         public IActionResult AddVehicleInfo([FromBody] GVAR gvar)
         {
             try

@@ -161,11 +161,11 @@ namespace FleetManagementLibrary.Data.Repositories
                     using (var reader = command.ExecuteReader())
                     {
                         List<AllVehiclesInfo> allVehiclesInfo = new List<AllVehiclesInfo>();
-                        float lastLatitude = Convert.ToSingle(reader["Latitude"]);
-                        float lastLongitude = Convert.ToSingle(reader["Longitude"]);
 
                         while (reader.Read())
                         {
+                            float lastLatitude = Convert.ToSingle(reader["Latitude"]);
+                            float lastLongitude = Convert.ToSingle(reader["Longitude"]);
                             allVehiclesInfo.Add(new AllVehiclesInfo
                             {
                                 VehicleNumber = Convert.ToInt64(reader["VehicleNumber"]),
