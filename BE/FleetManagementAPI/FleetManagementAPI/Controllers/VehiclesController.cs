@@ -18,42 +18,56 @@ namespace FleetManagementAPI.Controllers
         [HttpPost]
         public IActionResult AddVehicle([FromBody] GVAR gvar)
         {
+            GVAR answer = new GVAR();
+            answer.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
+            answer.DicOfDic["Tags"]["STS"] = "1";
             try
             {
                 _vehicleService.AddVehicle(gvar);
-                return Ok("Vehicle added successfully");
+                return Ok(answer);
             }
             catch (System.Exception ex)
             {
-                return BadRequest(ex.Message);
+                Console.WriteLine(ex);
+                answer.DicOfDic["Tags"]["STS"] = "0";
+                return BadRequest(answer);
             }
         }
 
         [HttpPut]
         public IActionResult UpdateVehicle([FromBody] GVAR gvar)
         {
+            GVAR answer = new GVAR();
+            answer.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
+            answer.DicOfDic["Tags"]["STS"] = "1";
             try
             {
                 _vehicleService.UpdateVehicle(gvar);
-                return Ok("Vehicle updated successfully");
+                return Ok(answer);
             }
             catch (System.Exception ex)
             {
-                return BadRequest(ex.Message);
+                Console.WriteLine(ex);
+                answer.DicOfDic["Tags"]["STS"] = "0";
+                return BadRequest(answer);
             }
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteVehicle(long id)
         {
+            GVAR answer = new GVAR();
+            answer.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
+            answer.DicOfDic["Tags"]["STS"] = "1";
             try
             {
                 _vehicleService.DeleteVehicle(id);
-                return Ok("Vehicle deleted successfully");
+                return Ok(answer);
             }
             catch (System.Exception ex)
             {
-                return BadRequest(ex.Message);
+                Console.WriteLine(ex);
+                return BadRequest(answer);
             }
         }
     }

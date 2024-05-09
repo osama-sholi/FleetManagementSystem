@@ -21,27 +21,38 @@ namespace FleetManagementAPI.Controllers
         {
             try
             {
-                var routesHistory = _routesHistoryService.GetVehicleRouteHistory(vehicleId, startDate, endDate);
-                var json = JsonConvert.SerializeObject(routesHistory);
+                GVAR gvar = _routesHistoryService.GetVehicleRouteHistory(vehicleId, startDate, endDate);
+                gvar.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
+                gvar.DicOfDic["Tags"]["STS"] = "1";
+                String json = JsonConvert.SerializeObject(gvar);
                 return Ok(json);
             }
             catch (System.Exception ex)
             {
-                return BadRequest(ex.Message);
+                Console.WriteLine(ex);
+                GVAR gvar = new GVAR();
+                gvar.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
+                gvar.DicOfDic["Tags"]["STS"] = "0";
+                return BadRequest(gvar);
             }
         }
 
         [HttpPost]
         public IActionResult AddRouteHistory([FromBody] GVAR gvar)
         {
+            GVAR answer = new GVAR();
+            answer.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
+            answer.DicOfDic["Tags"]["STS"] = "1";
             try
             {
                 _routesHistoryService.AddRouteHistory(gvar);
-                return Ok("Route history added successfully");
+                return Ok(answer);
             }
             catch (System.Exception ex)
             {
-                return BadRequest(ex.Message);
+                Console.WriteLine(ex);
+                answer.DicOfDic["Tags"]["STS"] = "0";
+                return BadRequest(answer);
             }
         }
     }

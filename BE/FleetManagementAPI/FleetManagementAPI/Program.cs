@@ -12,6 +12,11 @@ if (connectionString == null)
 
 // Add services to the container.
 
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+});
+
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<GeofenceService>( String => new GeofenceService(connectionString));
@@ -24,6 +29,7 @@ builder.Services.AddScoped<RouteHistoryService>(String => new RouteHistoryServic
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

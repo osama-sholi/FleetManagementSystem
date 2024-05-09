@@ -23,12 +23,16 @@ namespace FleetManagementAPI.Controllers
             try
             {
                 GVAR gvar = _vehicleInfoService.GetVehicleInfo(vehicleId);
-                String json = JsonConvert.SerializeObject(gvar);
-                return Ok(json);
+                gvar.DicOfDic["Tags"]["STS"] = "1";
+                return Ok(gvar);
             }
             catch (System.Exception ex)
             {
-                return BadRequest(ex.Message);
+                Console.WriteLine(ex);
+                GVAR gvar = new GVAR();
+                gvar.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
+                gvar.DicOfDic["Tags"]["STS"] = "0";
+                return BadRequest(gvar);
             }
         }
 
@@ -38,13 +42,18 @@ namespace FleetManagementAPI.Controllers
             try
             {
                 GVAR gvar = _vehicleInfoService.GetAllVehiclesInfo();
+                gvar.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
+                gvar.DicOfDic["Tags"]["STS"] = "1";
                 String json = JsonConvert.SerializeObject(gvar);
-                return Ok(json);
+                return Ok(gvar);
             }
             catch (System.Exception ex)
             {
                 Console.WriteLine(ex);
-                return BadRequest(ex.Message);
+                GVAR gvar = new GVAR();
+                gvar.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
+                gvar.DicOfDic["Tags"]["STS"] = "0";
+                return BadRequest(gvar);
             }
         }
 
@@ -52,14 +61,19 @@ namespace FleetManagementAPI.Controllers
 
         public IActionResult AddVehicleInfo([FromBody] GVAR gvar)
         {
+            GVAR answer = new GVAR();
+            answer.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
+            answer.DicOfDic["Tags"]["STS"] = "1";
             try
             {
                 _vehicleInfoService.AddVehicleInfo(gvar);
-                return Ok("Vehicle info added successfully");
+                return Ok(answer);
             }
             catch (System.Exception ex)
             {
-                return BadRequest(ex.Message);
+                Console.WriteLine(ex);
+                answer.DicOfDic["Tags"]["STS"] = "0";
+                return BadRequest(answer);
             }
         }
     }
