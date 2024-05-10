@@ -15,6 +15,27 @@ namespace FleetManagementAPI.Controllers
             _driverService = driverService;
         }
 
+        [HttpGet]
+        public IActionResult GetDrivers()
+        {
+            try
+            {
+                GVAR gvar = _driverService.GetAllDrivers();
+                gvar.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
+                gvar.DicOfDic["Tags"]["STS"] = "1";
+                String json = Newtonsoft.Json.JsonConvert.SerializeObject(gvar);
+                return Ok(json);
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex);
+                GVAR gvar = new GVAR();
+                gvar.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
+                gvar.DicOfDic["Tags"]["STS"] = "0";
+                return BadRequest(gvar);
+            }
+        }
+
         [HttpPost]
         public IActionResult AddDriver([FromBody]GVAR gvar)
         {

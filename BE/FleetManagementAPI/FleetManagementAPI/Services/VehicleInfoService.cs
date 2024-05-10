@@ -59,7 +59,7 @@ namespace FleetManagementAPI.Services
 
             gvar.DicOfDT["VehiclesInfo"].Columns.AddRange(new DataColumn[]
             {
-                new DataColumn("VehicleID", typeof(long)),
+                new DataColumn("VehicleID", typeof(string)),
                 new DataColumn("VehicleNumber", typeof(string)),
                 new DataColumn("VehicleType", typeof(string)),
                 new DataColumn("LastDirection", typeof(string)),
@@ -77,7 +77,7 @@ namespace FleetManagementAPI.Services
                 row["LastDirection"] = vehicleInfo.LastDirection;
                 row["LastStatus"] = vehicleInfo.LastStatus;
                 row["LastAddress"] = vehicleInfo.LastAddress;
-                row["LastPosition"] = vehicleInfo.LastPosition;
+                row["LastPosition"] = $"{vehicleInfo.LastLatitude},{vehicleInfo.LastLongitude}";
 
                 gvar.DicOfDT["VehiclesInfo"].Rows.Add(row);
             }

@@ -1,7 +1,6 @@
 ﻿using FleetManagementAPI.Services;
 using FPro;
 using Microsoft.AspNetCore.Mvc;
-using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace FleetManagementAPI.Controllers
@@ -45,7 +44,7 @@ namespace FleetManagementAPI.Controllers
                 gvar.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
                 gvar.DicOfDic["Tags"]["STS"] = "1";
                 String json = JsonConvert.SerializeObject(gvar);
-                return Ok(gvar);
+                return Ok(json);
             }
             catch (System.Exception ex)
             {

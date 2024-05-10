@@ -164,8 +164,6 @@ namespace FleetManagementLibrary.Data.Repositories
 
                         while (reader.Read())
                         {
-                            float lastLatitude = Convert.ToSingle(reader["Latitude"]);
-                            float lastLongitude = Convert.ToSingle(reader["Longitude"]);
                             allVehiclesInfo.Add(new AllVehiclesInfo
                             {
                                 VehicleNumber = Convert.ToInt64(reader["VehicleNumber"]),
@@ -173,7 +171,8 @@ namespace FleetManagementLibrary.Data.Repositories
                                 LastDirection = Convert.ToInt32(reader["VehicleDirection"]),
                                 LastStatus = Convert.ToChar(reader["Status"]),
                                 LastAddress = reader["Address"].ToString(),
-                                LastPosition = (lastLatitude, lastLongitude)
+                                LastLatitude = Convert.ToSingle(reader["Latitude"]),
+                                LastLongitude = Convert.ToSingle(reader["Longitude"])
                             });
                         }
 
