@@ -111,45 +111,43 @@ FE/fleetManagementApp/typings
 *.env.test.local
 *.env.production.local
 
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
-
 # Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
+/FE/dist
+/FE/tmp
+/FE/out-tsc
+/FE/bazel-out
 
 # Node
-/node_modules
-npm-debug.log
-yarn-error.log
+/FE/node_modules
+/FE/npm-debug.log
+/FE/yarn-error.log
 
 # IDEs and editors
-.idea/
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
+/FE/.idea/
+/FE/.project
+/FE/.classpath
+/FE/.c9/
+/FE/*.launch
+/FE/.settings/
+/FE/*.sublime-workspace
 
 # Visual Studio Code
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history/*
+/FE/.vscode/*
+!/FE/.vscode/settings.json
+!/FE/.vscode/tasks.json
+!/FE/.vscode/launch.json
+!/FE/.vscode/extensions.json
+/FE/.history/*
 
 # Miscellaneous
-/.angular/cache
-.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
+/FE/.angular/cache
+/FE/.sass-cache/
+/FE/connect.lock
+/FE/coverage
+/FE/libpeerconnection.log
+/FE/testem.log
+/FE/typings
 
 # System files
-.DS_Store
-Thumbs.db
+/FE/.DS_Store
+/FE/Thumbs.db
