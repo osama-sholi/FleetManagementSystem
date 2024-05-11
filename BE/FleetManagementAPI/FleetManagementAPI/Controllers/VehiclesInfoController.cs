@@ -21,6 +21,7 @@ namespace FleetManagementAPI.Controllers
         {
             try
             {
+                Console.WriteLine("VehicleId: " + vehicleId);
                 GVAR gvar = _vehicleInfoService.GetVehicleInfo(vehicleId);
                 gvar.DicOfDic["Tags"]["STS"] = "1";
                 return Ok(gvar);

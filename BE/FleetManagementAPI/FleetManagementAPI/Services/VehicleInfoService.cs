@@ -24,11 +24,6 @@ namespace FleetManagementAPI.Services
                 throw new Exception("Vehicle info not found");
             }
 
-            if (vehicleInfo == null)
-            {
-                throw new Exception("Vehicle not found");
-            }
-
             gvar.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
 
             gvar.DicOfDic["Tags"]["VehicleType"] = vehicleInfo.VehicleType;
@@ -40,6 +35,8 @@ namespace FleetManagementAPI.Services
             gvar.DicOfDic["Tags"]["LastGPSTime"] = vehicleInfo.LastGPSTime.ToString();
             gvar.DicOfDic["Tags"]["LastGPSSpeed"] = vehicleInfo.LastGPSSpeed;
             gvar.DicOfDic["Tags"]["LastAddress"] = vehicleInfo.LastAddress;
+
+            Console.WriteLine("type",gvar.DicOfDic["Tags"]["VehicleType"]);
 
             return gvar;
         }

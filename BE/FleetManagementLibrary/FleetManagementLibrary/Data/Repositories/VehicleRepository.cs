@@ -40,15 +40,10 @@ namespace FleetManagementLibrary.Data.Repositories
         public void UpdateVehicle(Vehicles vehicle)
         {
             // SQL query to update the VehicleNumber and VehicleType of a vehicle in the Vehicles table based on the VehicleID
-            string query = "UPDATE Vehicles SET ";
-
-            if (vehicle.VehicleNumber != 0) // To keep old value if new value is not provided
-                query += "VehicleNumber = @VehicleNumber, ";
-
-            if (!string.IsNullOrEmpty(vehicle.VehicleType))
-                query += "VehicleType = @VehicleType";
-
-            query += " WHERE VehicleID = @VehicleID";
+            string query = "UPDATE Vehicles SET " +
+                           "VehicleNumber = @VehicleNumber, " +
+                           "VehicleType = @VehicleType " +
+                           "WHERE VehicleID = @VehicleID";
 
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
@@ -57,12 +52,8 @@ namespace FleetManagementLibrary.Data.Repositories
                 using (NpgsqlCommand command = new NpgsqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@VehicleID", vehicle.VehicleID);
-
-                    if (vehicle.VehicleNumber != 0)
-                        command.Parameters.AddWithValue("@VehicleNumber", vehicle.VehicleNumber);
-
-                    if (!string.IsNullOrEmpty(vehicle.VehicleType))
-                        command.Parameters.AddWithValue("@VehicleType", vehicle.VehicleType);
+                    command.Parameters.AddWithValue("@VehicleNumber", vehicle.VehicleNumber);
+                    command.Parameters.AddWithValue("@VehicleType", vehicle.VehicleType);
 
                     command.ExecuteNonQuery();
                 }

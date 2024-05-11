@@ -51,6 +51,7 @@ export class DataTableComponent implements OnChanges, OnInit {
 
   data: any[] = [];
   displayedColumns: string[] = [];
+  @Input() fields: string[] = [];
   @Input() add: boolean = false;
   @Input() service: IService | undefined;
   @Input() entity: string = '';
@@ -84,7 +85,7 @@ export class DataTableComponent implements OnChanges, OnInit {
       data: {
         entity: this.entity,
         purpose: 'Add',
-        fields: this.displayedColumns,
+        fields: this.fields.length === 0 ? this.displayedColumns : this.fields,
       },
     });
 
@@ -130,7 +131,8 @@ export class DataTableComponent implements OnChanges, OnInit {
         this.performEdit(element);
         break;
 
-      case 'VIEW':
+      case 'MORE-INFO':
+        this.moreInfo(element);
         break;
     }
   };
@@ -171,7 +173,7 @@ export class DataTableComponent implements OnChanges, OnInit {
       data: {
         entity: this.entity,
         purpose: 'Edit',
-        fields: this.displayedColumns,
+        fields: this.fields.length === 0 ? this.displayedColumns : this.fields,
         element: element,
       },
     });
@@ -209,5 +211,41 @@ export class DataTableComponent implements OnChanges, OnInit {
         );
       }
     });
+  }
+
+  moreInfo(element: any) {
+    const data = this.getInfo(element);
+    const fields = data === null ? Object.keys(data) : [];
+    console.log(data);
+    console.log(fields);
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: {
+        data: data,
+        purpose: 'More-Info',
+        fields: fields,
+        element: element,
+      },
+    });
+  }
+
+  getInfo(element: any) {
+    this.service?.getInfo(element).subscribe(
+      (data: any) => {
+        return data;
+      },
+      (error) => {
+        let errorMessage = 'An unknown error occurred!';
+        if (error.status === 404) {
+          errorMessage = 'Resource not found!';
+        } else if (error.status === 400) {
+          errorMessage = 'Bad request!';
+        } else if (error.status === 500) {
+          errorMessage = 'Server error!';
+        }
+        this.snackBar.open(errorMessage, 'Close', {
+          duration: 2000,
+        });
+      }
+    );
   }
 }

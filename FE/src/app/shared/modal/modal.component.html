@@ -10,7 +10,7 @@
     </div>
 
     <div>
-      <button mat-button (click)="onCancel()">Cancel</button>
+      <button mat-button (click)="onCancel()" type="button">Cancel</button>
       <button mat-button type="submit" [disabled]="!formGroup.valid">
         Confirm
       </button>

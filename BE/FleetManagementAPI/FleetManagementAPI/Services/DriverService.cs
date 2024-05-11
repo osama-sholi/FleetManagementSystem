@@ -41,7 +41,6 @@ namespace FleetManagementAPI.Services
 
         public void AddDriver(GVAR gvar)
         {
-            Console.WriteLine(gvar.DicOfDic.Count);
             Driver driver = new Driver()
             {
                 DriverName = gvar.DicOfDic["Tags"]["DriverName"],

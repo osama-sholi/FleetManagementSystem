@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SidebarComponent } from './core/sidebar/sidebar.component';
@@ -20,9 +19,10 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
 import { SharedModule } from './shared/shared.module';
 import { DialogComponent } from './shared/modal/modal.component';
-import { DataTableComponent } from './shared/data-table/data-table.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { GeofencesComponent } from './features/geofences/geofences.component';
+import { VehiclesComponent } from './features/vehicles/vehicles.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,6 +30,7 @@ import { GeofencesComponent } from './features/geofences/geofences.component';
     DriversComponent,
     DialogComponent,
     GeofencesComponent,
+    VehiclesComponent,
   ],
   imports: [
     BrowserModule,

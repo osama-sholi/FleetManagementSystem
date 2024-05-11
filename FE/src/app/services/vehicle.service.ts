@@ -7,14 +7,15 @@ import { GVAR } from '../models/gvar.model';
 @Injectable({
   providedIn: 'root',
 })
-export class GeofenceService implements IService {
-  private apiUrl = 'http://localhost:5179/api/Geofences';
+export class VehicleService implements IService {
+  private apiUrl = 'http://localhost:5179/api/Vehicles';
+  private infoApiIrl = 'http://localhost:5179/api/VehiclesInfo';
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<any> {
-    let gvarObservable: Observable<any> = this.http.get<any>(this.apiUrl);
+    let gvarObservable: Observable<any> = this.http.get<any>(this.infoApiIrl);
     let dicOfDTObservable = gvarObservable.pipe(
-      map((gvar) => gvar.DicOfDT.Geofences)
+      map((gvar) => gvar.DicOfDT.VehiclesInfo)
     );
     return dicOfDTObservable;
   }
@@ -32,10 +33,16 @@ export class GeofenceService implements IService {
   }
 
   delete(entity: any): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${entity.DriverID}`);
+    return this.http.delete(`${this.apiUrl}/${entity.VehicleID}`);
   }
 
-  getInfo(id: number): Observable<any> {
-    return new Observable();
+  getInfo(VehicleID: number): Observable<any> {
+    let gvarObservable: Observable<any> = this.http.get<any>(
+      `${this.apiUrl}/${VehicleID}`
+    );
+    let dicOfDTObservable = gvarObservable.pipe(
+      map((gvar) => gvar.DicOfDT.VehiclesInfo)
+    );
+    return dicOfDTObservable;
   }
 }

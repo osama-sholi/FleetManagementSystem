@@ -52,29 +52,13 @@ namespace FleetManagementLibrary.Data.Repositories
             // SQL query to update the vehicle info in the VehicleInformation table which has the VehicleID which refrences the vehicle table,
             // DriverID which refrences the driver table, VehicleMake, VehicleModel, PurchaseDate columns
 
-            string query = "UPDATE VehiclesInformations SET ";
+            string query = "UPDATE VehiclesInformations SET " +
+                           "DriverID = DriverID, " +
+                           "VehicleMake = VehicleMake, " +
+                           "VehicleModel = VehicleModel, " +
+                           "PurchaseDate = PurchaseDate " +
+                           "WHERE VehicleID = VehicleID";
 
-            if (vehicleInfo.DriverID != 0) // To keep old value if new value is not provided
-            {
-                query += "DriverID = @DriverID, ";
-            }
-
-            if (!string.IsNullOrEmpty(vehicleInfo.VehicleMake))
-            {
-                query += "VehicleMake = @VehicleMake, ";
-            }
-
-            if (!string.IsNullOrEmpty(vehicleInfo.VehicleModel))
-            {
-                query += "VehicleModel = @VehicleModel, ";
-            }
-
-            if (vehicleInfo.PurchaseDate != 0)
-            {
-                query += "PurchaseDate = @PurchaseDate ";
-            }
-
-            query += "WHERE VehicleID = @VehicleID";
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
                 connection.Open();
@@ -82,26 +66,10 @@ namespace FleetManagementLibrary.Data.Repositories
                 using (NpgsqlCommand command = new NpgsqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@VehicleID", vehicleInfo.VehicleID);
-
-                    if (vehicleInfo.DriverID != 0)
-                    {
-                        command.Parameters.AddWithValue("@DriverID", vehicleInfo.DriverID);
-                    }
-
-                    if (!string.IsNullOrEmpty(vehicleInfo.VehicleMake))
-                    {
-                        command.Parameters.AddWithValue("@VehicleMake", vehicleInfo.VehicleMake);
-                    }
-
-                    if (!string.IsNullOrEmpty(vehicleInfo.VehicleModel))
-                    {
-                        command.Parameters.AddWithValue("@VehicleModel", vehicleInfo.VehicleModel);
-                    }
-
-                    if (vehicleInfo.PurchaseDate != 0)
-                    {
-                        command.Parameters.AddWithValue("@PurchaseDate", vehicleInfo.PurchaseDate);
-                    }
+                    command.Parameters.AddWithValue("@DriverID", vehicleInfo.DriverID);
+                    command.Parameters.AddWithValue("@VehicleMake", vehicleInfo.VehicleMake);
+                    command.Parameters.AddWithValue("@VehicleModel", vehicleInfo.VehicleModel);
+                    command.Parameters.AddWithValue("@PurchaseDate", vehicleInfo.PurchaseDate);
 
                     command.ExecuteNonQuery();
                 }
@@ -140,17 +108,17 @@ namespace FleetManagementLibrary.Data.Repositories
             // VehicleID, VehicleNumber and VehicleType from the Vehicles table
             // LastDirection, LastStatus, LastAddress, LastLatitude and LastLongitute from the RouteHistory table by joining the tables and retrieving the last recorded record for each vehicle
 
-            string query =
-                "SELECT v.VehicleNumber, v.VehicleType, rh.VehicleDirection, rh.Status, rh.Address, rh.Latitude, rh.Longitude " +
-                "FROM Vehicles v " +
-                "INNER JOIN (" + // Subquery to get the last record for each vehicle
-                "SELECT VehicleID, VehicleDirection, Status, Address, Latitude, Longitude " +
-                "FROM RouteHistory rh1 " +
-                "WHERE RecordTime = (" +
-                "SELECT MAX(RecordTime)" +
-                "FROM RouteHistory rh2 " +
-                "WHERE rh1.VehicleID = rh2.VehicleID)) " + // End of subquery
-                "rh ON v.VehicleID = rh.VehicleID";
+            string query = "SELECT v.VehicleID, v.VehicleNumber, v.VehicleType, rh.VehicleDirection, rh.Status, rh.Address, rh.Latitude, rh.Longitude " +
+                           "FROM Vehicles v " +
+                           "LEFT JOIN (" + // Subquery to get the last record for each vehicle
+                           "SELECT VehicleID, MAX(RouteHistoryID) as ID, VehicleDirection, Status, Address, Latitude, Longitude " +
+                           "FROM RouteHistory rh1 " +
+                           "WHERE RecordTime = (" +
+                           "SELECT MAX(RecordTime)" +
+                           "FROM RouteHistory rh2 " +
+                           "WHERE rh1.VehicleID = rh2.VehicleID) " +
+                           "GROUP BY VehicleID, VehicleDirection, Status, Address, Latitude, Longitude) " + // End of subquery
+                           "rh ON v.VehicleID = rh.VehicleID";
 
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
@@ -166,13 +134,14 @@ namespace FleetManagementLibrary.Data.Repositories
                         {
                             allVehiclesInfo.Add(new AllVehiclesInfo
                             {
+                                VehicleID = Convert.ToInt64(reader["VehicleID"]),
                                 VehicleNumber = Convert.ToInt64(reader["VehicleNumber"]),
                                 VehicleType = reader["VehicleType"].ToString(),
-                                LastDirection = Convert.ToInt32(reader["VehicleDirection"]),
-                                LastStatus = Convert.ToChar(reader["Status"]),
-                                LastAddress = reader["Address"].ToString(),
-                                LastLatitude = Convert.ToSingle(reader["Latitude"]),
-                                LastLongitude = Convert.ToSingle(reader["Longitude"])
+                                LastDirection = reader["VehicleDirection"] == DBNull.Value ? ' ' : Convert.ToChar(reader["VehicleDirection"]),
+                                LastStatus = reader["Status"] == DBNull.Value ? ' ' : Convert.ToChar(reader["Status"]),
+                                LastAddress = reader["Address"] == DBNull.Value ? "" : reader["Address"].ToString(),
+                                LastLatitude = reader["Latitude"] == DBNull.Value ? 0 : Convert.ToSingle(reader["Latitude"]),
+                                LastLongitude = reader["Longitude"] == DBNull.Value ? 0 : Convert.ToSingle(reader["Longitude"]),
                             });
                         }
 
@@ -194,20 +163,18 @@ namespace FleetManagementLibrary.Data.Repositories
             // LastPosition(Latitude,Longitude), LastGPSTime(RecordTime), LastGPSSpeed(Speed) and LastAddress from the RouteHistory table by joining the last recorded record for the vehicle with the joined tables above
 
             string query =
-                "Select v.VehicleNumber, v.VehicleType, vi.VehicleMake, vi.VehicleModel, d.DriverName, d.PhoneNumber, " +
-                "rh.Latitude, rh.longitude, rh.RecordTime, rh.VehicleSpeed, rh.Address " +
-                "From Vehicles v " +
-                "Inner Join VehiclesInformations vi on v.VehicleID = vi.VehicleID " +
-                "Inner Join Driver d on vi.DriverID = d.DriverID " +
-                "Inner Join ( " + // Subquery to get the last record for the vehicle
-                "Select VehicleID, Latitude, Longitude, RecordTime, VehicleSpeed, Address " +
-                "From RouteHistory rh1 " +
-                "Where RecordTime = ( " +
-                "Select Max(RecordTime) " +
-                "From RouteHistory rh2 " +
-                "Where rh1.VehicleID = rh2.VehicleID)) " + // End of subquery
-                "rh on v.VehicleID = rh.VehicleID " +
-                "Where v.VehicleID = @VehicleID";
+    "SELECT v.VehicleNumber, v.VehicleType, vi.VehicleMake, vi.VehicleModel, d.DriverName, d.PhoneNumber, " +
+    "rh.Latitude, rh.longitude, rh.RecordTime, rh.VehicleSpeed, rh.Address " +
+    "FROM Vehicles v " +
+    "LEFT JOIN VehiclesInformations vi on v.VehicleID = vi.VehicleID " +
+    "LEFT JOIN Driver d on vi.DriverID = d.DriverID " +
+    "LEFT JOIN ( " + // Subquery to get the last record for the vehicle
+    "SELECT VehicleID, Latitude, Longitude, MAX(RecordTime) as RecordTime, VehicleSpeed, Address " +
+    "FROM RouteHistory " +
+    "GROUP BY VehicleID, Latitude, Longitude, VehicleSpeed, Address) " + // End of subquery
+    "rh on v.VehicleID = rh.VehicleID " +
+    "WHERE v.VehicleID = @VehicleID";
+
 
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
             {
@@ -221,21 +188,21 @@ namespace FleetManagementLibrary.Data.Repositories
                     {
                         if (reader.Read())
                         {
-                            float latitude = Convert.ToSingle(reader["Latitude"]);
-                            float longitude = Convert.ToSingle(reader["Longitude"]);
+                            float latitude = reader["Latitude"] == DBNull.Value ? 0 : Convert.ToSingle(reader["Latitude"]);
+                            float longitude = reader["Longitude"] == DBNull.Value ? 0 : Convert.ToSingle(reader["Longitude"]);
 
                             return new VehicleInfo
                             {
                                 VehicleNumber = Convert.ToInt64(reader["VehicleNumber"]),
                                 VehicleType = reader["VehicleType"].ToString(),
-                                DriverName = reader["DriverName"].ToString(),
-                                PhoneNumber = Convert.ToInt64(reader["PhoneNumber"]),
+                                DriverName = reader["DriverName"] == DBNull.Value ? "" : reader["DriverName"].ToString(),
+                                PhoneNumber = reader["PhoneNumber"] == DBNull.Value ? 0 : Convert.ToInt64(reader["PhoneNumber"]),
                                 LastPosition = (latitude, longitude),
-                                VehicleMake = reader["VehicleMake"].ToString(),
-                                VehicleModel = reader["VehicleModel"].ToString(),
-                                LastGPSTime = Convert.ToInt64(reader["RecordTime"]),
-                                LastGPSSpeed = reader["VehicleSpeed"].ToString(),
-                                LastAddress = reader["Address"].ToString()
+                                VehicleMake = reader["VehicleMake"] == DBNull.Value ? "" : reader["VehicleMake"].ToString(),
+                                VehicleModel = reader["VehicleModel"] == DBNull.Value ? "" : reader["VehicleModel"].ToString(),
+                                LastGPSTime = reader["RecordTime"] == DBNull.Value ? 0 : Convert.ToInt64(reader["RecordTime"]),
+                                LastGPSSpeed = reader["VehicleSpeed"] == DBNull.Value ? "" : reader["VehicleSpeed"].ToString(),
+                                LastAddress = reader["Address"] == DBNull.Value ? "" : reader["Address"].ToString()
                             };
                         }
 

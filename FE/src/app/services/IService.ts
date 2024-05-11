@@ -5,4 +5,5 @@ export interface IService {
   add(entity: any): Observable<any>;
   update(entity: any): Observable<any>;
   delete(entity: any): Observable<any>;
+  getInfo(id: number): Observable<any>;
 }

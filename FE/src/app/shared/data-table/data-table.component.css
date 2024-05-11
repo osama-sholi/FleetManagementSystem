@@ -43,6 +43,14 @@ mat-form-field {
     background-color: #9575CD;
 }
 
+.more-info {
+    background-color: #FFC107;
+}
+
+.route-history {
+    background-color: #4CAF50;
+}
+
 th {
     text-align: center;
 }

@@ -34,4 +34,8 @@ export class DriverService implements IService {
   delete(entity: any): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${entity.DriverID}`);
   }
+
+  getInfo(id: number): Observable<any> {
+    return new Observable();
+  }
 }
