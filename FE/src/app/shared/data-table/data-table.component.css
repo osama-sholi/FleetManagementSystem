@@ -1,0 +1,52 @@
+mat-form-field {
+    width: 90%;
+    height: 80px;
+}
+
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    width: 95%;
+}
+
+.toolbar button {
+    width: fit-content;
+    height: fit-content;
+    padding: 18.5px;
+    white-space: nowrap;
+    background-color: #D1C4E9;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.actions {
+    text-align: center;
+}
+
+.actions button {
+    margin: 0 10px;
+    border-radius: 10px;
+    border: none;
+    padding: 8px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.delete {
+    background-color: #F44336;
+}
+
+.edit {
+    background-color: #9575CD;
+}
+
+th {
+    text-align: center;
+}
+
+#table-container {
+    overflow: auto;
+}

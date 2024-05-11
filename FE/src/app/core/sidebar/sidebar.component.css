@@ -1,0 +1,27 @@
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+.sidenav-container {
+    height: 100vh;
+}
+
+.sidenav {
+    width: 250px;
+}
+
+mat-nav-list a {
+    margin-top: 50px;
+    margin-left: 20px;
+    font-size: 20px;
+    border-bottom: solid 1px;
+    width: 200px;
+    display: block;
+    max-height: 35px;
+}
+
+mat-nav-list a mat-icon {
+    vertical-align: middle;
+}
+
+mat-sidenav-container {
+    background-color: white;
+}

@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>{{ data.purpose }} {{ data.entity }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="formGroup" (ngSubmit)="onConfirm()">
+    <div *ngFor="let field of fields">
+      <mat-form-field>
+        <mat-label>{{ field }}</mat-label>
+        <input matInput formControlName="{{ field }}" />
+      </mat-form-field>
+    </div>
+
+    <div>
+      <button mat-button (click)="onCancel()">Cancel</button>
+      <button mat-button type="submit" [disabled]="!formGroup.valid">
+        Confirm
+      </button>
+    </div>
+  </form>
+</mat-dialog-content>
