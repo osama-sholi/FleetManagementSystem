@@ -26,6 +26,14 @@ namespace FleetManagementAPI.Controllers
                 String json = Newtonsoft.Json.JsonConvert.SerializeObject(gvar);
                 return Ok(json);
             }
+            catch (ResourseNotFoundException ex)
+            {
+                Console.WriteLine(ex);
+                GVAR gvar = new GVAR();
+                gvar.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
+                gvar.DicOfDic["Tags"]["STS"] = "0";
+                return NotFound(gvar);
+            }
             catch (System.Exception ex)
             {
                 Console.WriteLine(ex);

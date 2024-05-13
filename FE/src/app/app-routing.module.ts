@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DriversComponent } from './features/drivers/drivers.component';
 import { GeofencesComponent } from './features/geofences/geofences.component';
 import { VehiclesComponent } from './features/vehicles/vehicles.component';
+import { RouteHistoryComponent } from './features/route-history/route-history';
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
   {
     path: 'vehicles',
     component: VehiclesComponent,
+  },
+  {
+    path: 'vehicles/:id/route-history',
+    component: RouteHistoryComponent,
   },
   {
     path: '',

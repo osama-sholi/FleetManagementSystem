@@ -52,6 +52,10 @@ export class VehicleService implements IService {
           if (vehicle.LastGPSTime === '0') {
             vehicle.LastPosition = '';
             vehicle.LastGPSTime = '';
+          } else {
+            let date = new Date(vehicle.LastGPSTime * 1000);
+            vehicle.LastGPSTime =
+              date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
           }
           if (vehicle.DriverName === '' && vehicle.PhoneNumber === '0') {
             vehicle.DriverName = '';

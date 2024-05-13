@@ -37,7 +37,7 @@ namespace FleetManagementAPI.Services
 
                             if (gvar == null)
                             {
-                                throw new Exception("GVAR object is null");
+                                throw new ResourseNotFoundException("GVAR object is null");
                             }
 
                             routeHistoryService.AddRouteHistory(gvar);
@@ -56,7 +56,7 @@ namespace FleetManagementAPI.Services
                     });
                 }
             }
-            catch (Exception ex)
+            catch (ResourseNotFoundException ex)
             {
                 Console.WriteLine(ex);
                 GVAR gvar = new GVAR();

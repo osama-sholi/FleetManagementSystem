@@ -18,10 +18,23 @@ export class DialogComponent {
 
     this.fields.forEach((field: string) => {
       if (this.data['purpose'] === 'Edit') {
+        controls[field] = [this.data['element'][field], Validators.required];
+      } else if (field === 'Status') {
         controls[field] = [
-          this.data['element'][field].toString(),
-          Validators.required,
+          '',
+          [Validators.required, Validators.pattern('^[01]$')],
         ];
+      } else if (field === 'RecordTime') {
+        let date = new Date();
+        let formattedDate =
+          date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+          }) +
+          ' ' +
+          date.toLocaleTimeString();
+        controls[field] = [formattedDate, Validators.required];
       } else {
         controls[field] = ['', Validators.required];
       }
@@ -37,7 +50,10 @@ export class DialogComponent {
 
   fields: string[] = this.data['fields'].reduce(
     (acc: string[], field: string) => {
-      if (acc.length === 0 && field.toLowerCase().endsWith('id')) {
+      if (
+        (acc.length === 0 && field.toLowerCase().endsWith('id')) ||
+        field === 'Actions'
+      ) {
         return acc;
       }
       return [...acc, field];
@@ -59,17 +75,21 @@ export class DialogComponent {
       )[0];
       entity[id] = this.data['element'][id].toString();
     }
+    if (this.data['history']) {
+      entity['VehicleID'] = this.data['id'];
+    }
     this.dialogRef.close(entity);
   }
 
   onAdd(): void {
     const result = {
       VehicleID: this.data.element.VehicleID,
-      DriverID: this.formGroup.value.DriverID,
+      DriverID: this.formGroup.value.Driver.toString(),
       VehicleMake: this.formGroup.value.VehicleMake,
       VehicleModel: this.formGroup.value.VehicleModel,
       PurchaseDate: this.formGroup.value.PurchaseDate,
     };
+
     this.dialogRef.close({ action: 'add', data: result });
   }
 
@@ -78,6 +98,13 @@ export class DialogComponent {
   }
 
   onUpdate(): void {
-    this.dialogRef.close({ action: 'update', data: this.formGroup.value });
+    const result = {
+      VehicleID: this.data.element.VehicleID,
+      DriverID: this.formGroup.value.Driver.toString(),
+      VehicleMake: this.formGroup.value.VehicleMake,
+      VehicleModel: this.formGroup.value.VehicleModel,
+      PurchaseDate: this.formGroup.value.PurchaseDate,
+    };
+    this.dialogRef.close({ action: 'update', data: result });
   }
 }

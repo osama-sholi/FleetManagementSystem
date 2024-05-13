@@ -25,6 +25,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { DataTableComponent } from './shared/data-table/data-table.component';
 import { MatOption } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import { RouteHistoryComponent } from './features/route-history/route-history';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { MatSelectModule } from '@angular/material/select';
     GeofencesComponent,
     VehiclesComponent,
     DataTableComponent,
+    RouteHistoryComponent,
   ],
   imports: [
     BrowserModule,

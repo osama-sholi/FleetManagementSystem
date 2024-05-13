@@ -7,14 +7,24 @@ import { GVAR } from '../models/gvar.model';
 @Injectable({
   providedIn: 'root',
 })
-export class DriverService implements IService {
-  private apiUrl = 'http://localhost:5179/api/Drivers';
+export class RouteHistoryService implements IService {
+  private apiUrl = 'http://localhost:5179/api/RoutesHistory';
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<any> {
-    let gvarObservable: Observable<any> = this.http.get<any>(this.apiUrl);
+  getAll(entity: any): Observable<any> {
+    let gvarObservable: Observable<any> = this.http.get<any>(
+      `${this.apiUrl}/${entity}/0/${Number.MAX_SAFE_INTEGER}`
+    );
     let dicOfDTObservable = gvarObservable.pipe(
-      map((gvar) => gvar.DicOfDT.Drivers)
+      map((gvar) => {
+        let routeHistory = gvar.DicOfDT.RouteHistory;
+        routeHistory.forEach((item: any) => {
+          let date = new Date(item.GPSTime * 1000);
+          item.GPSTime =
+            date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+        });
+        return routeHistory;
+      })
     );
     return dicOfDTObservable;
   }
@@ -22,18 +32,21 @@ export class DriverService implements IService {
   add(entity: any): Observable<any> {
     var gvar = new GVAR();
     gvar.DicOfDic['Tags'] = entity;
+    gvar.DicOfDic['Tags']['VehicleID'] = entity['VehicleID'].toString();
+    let date = new Date(entity['RecordTime']);
+    gvar.DicOfDic['Tags']['RecordTime'] = Math.floor(
+      date.getTime() / 1000
+    ).toString();
+    console.log(gvar);
     return this.http.post(this.apiUrl, gvar);
   }
 
   update(entity: any): Observable<any> {
-    var gvar = new GVAR();
-    entity.PhoneNumber = entity.PhoneNumber.toString();
-    gvar.DicOfDic['Tags'] = entity;
-    return this.http.put(this.apiUrl, gvar);
+    return new Observable();
   }
 
   delete(entity: any): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${entity.DriverID}`);
+    return new Observable();
   }
 
   getInfo(id: number): Observable<any> {

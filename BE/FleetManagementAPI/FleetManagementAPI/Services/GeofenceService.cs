@@ -20,7 +20,7 @@ namespace FleetManagementAPI.Services
 
             if(geofences == null || geofences.Count == 0)
             {
-                throw new Exception("No geofences found");
+                throw new ResourseNotFoundException("No geofences found");
             }
 
             GVAR gvar = new GVAR();
@@ -63,7 +63,7 @@ namespace FleetManagementAPI.Services
 
             if(geofences == null || geofences.Count == 0)
             {
-                throw new Exception("No circular geofences found");
+                throw new ResourseNotFoundException("No circular geofences found");
             }
 
             GVAR gvar = new GVAR();
@@ -99,7 +99,7 @@ namespace FleetManagementAPI.Services
 
             if(geofences == null || geofences.Count == 0)
             {
-                throw new Exception("No rectangular geofences found");
+                throw new ResourseNotFoundException("No rectangular geofences found");
             }
 
             GVAR gvar = new GVAR();
@@ -139,7 +139,7 @@ namespace FleetManagementAPI.Services
 
             if(geofences == null || geofences.Count == 0)
             {
-                throw new Exception("No polygon geofences found");
+                throw new ResourseNotFoundException("No polygon geofences found");
             }
 
             GVAR gvar = new GVAR();

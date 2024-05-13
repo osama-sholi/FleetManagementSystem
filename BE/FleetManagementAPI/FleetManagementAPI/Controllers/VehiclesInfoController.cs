@@ -15,7 +15,26 @@ namespace FleetManagementAPI.Controllers
         {
             _vehicleInfoService = vehicleInfoService;
         }
+        [HttpPost]
+        public IActionResult AddVehicleInfo([FromBody] GVAR gvar)
+        {
+            Console.WriteLine("gvar.DicOfDT");
 
+            GVAR answer = new GVAR();
+            answer.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
+            answer.DicOfDic["Tags"]["STS"] = "1";
+            try
+            {
+                _vehicleInfoService.AddVehicleInfo(gvar);
+                return Ok(answer);
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex);
+                answer.DicOfDic["Tags"]["STS"] = "0";
+                return BadRequest(answer);
+            }
+        }
         [HttpGet("{vehicleId}")]
         public IActionResult GetVehicleInfo(long vehicleId)
         {
@@ -26,6 +45,14 @@ namespace FleetManagementAPI.Controllers
                 gvar.DicOfDic["Tags"]["STS"] = "1";
                 String json = JsonConvert.SerializeObject(gvar);
                 return Ok(json);
+            }
+            catch (ResourseNotFoundException ex)
+            {
+                Console.WriteLine(ex);
+                GVAR gvar = new GVAR();
+                gvar.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
+                gvar.DicOfDic["Tags"]["STS"] = "0";
+                return NotFound(gvar);
             }
             catch (System.Exception ex)
             {
@@ -48,6 +75,14 @@ namespace FleetManagementAPI.Controllers
                 String json = JsonConvert.SerializeObject(gvar);
                 return Ok(json);
             }
+            catch (ResourseNotFoundException ex)
+            {
+                Console.WriteLine(ex);
+                GVAR gvar = new GVAR();
+                gvar.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
+                gvar.DicOfDic["Tags"]["STS"] = "0";
+                return NotFound(gvar);
+            }
             catch (System.Exception ex)
             {
                 Console.WriteLine(ex);
@@ -58,25 +93,7 @@ namespace FleetManagementAPI.Controllers
             }
         }
 
-        [HttpPost]
 
-        public IActionResult AddVehicleInfo([FromBody] GVAR gvar)
-        {
-            GVAR answer = new GVAR();
-            answer.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
-            answer.DicOfDic["Tags"]["STS"] = "1";
-            try
-            {
-                _vehicleInfoService.AddVehicleInfo(gvar);
-                return Ok(answer);
-            }
-            catch (System.Exception ex)
-            {
-                Console.WriteLine(ex);
-                answer.DicOfDic["Tags"]["STS"] = "0";
-                return BadRequest(answer);
-            }
-        }
 
         [HttpPut]
         public IActionResult UpdateVehicleInfo([FromBody] GVAR gvar)

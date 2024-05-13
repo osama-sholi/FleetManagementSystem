@@ -21,7 +21,7 @@ namespace FleetManagementAPI.Services
 
             if (routes == null || routes.Count == 0)
             {
-                throw new Exception("No routes found");
+                throw new ResourseNotFoundException("No routes found");
             }
 
             gvar.DicOfDT["RouteHistory"] = new DataTable();

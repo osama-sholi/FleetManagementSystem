@@ -42,6 +42,7 @@
         <button
           mat-button
           (click)="onUpdate()"
+          type="button"
           [disabled]="!formGroup.valid"
           *ngIf="data.hasInfo === true"
         >
@@ -49,6 +50,7 @@
         </button>
         <button
           mat-button
+          type="button"
           (click)="onAdd()"
           [disabled]="!formGroup.valid"
           *ngIf="data.hasInfo === false"

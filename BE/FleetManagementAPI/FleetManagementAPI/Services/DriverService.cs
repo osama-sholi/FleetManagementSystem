@@ -19,7 +19,7 @@ namespace FleetManagementAPI.Services
             var drivers = _driverRepository.GetAllDrivers();
             if (drivers == null || drivers.Count == 0)
             {
-                throw new System.Exception("No drivers found");
+                throw new ResourseNotFoundException("No drivers found");
             }
             gvar.DicOfDT["Drivers"] = new System.Data.DataTable();
             gvar.DicOfDT["Drivers"].Columns.AddRange(new System.Data.DataColumn[]

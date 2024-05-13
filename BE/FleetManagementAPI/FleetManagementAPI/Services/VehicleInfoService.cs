@@ -22,7 +22,7 @@ namespace FleetManagementAPI.Services
 
             if (vehicleInfo == null)
             {
-                throw new Exception("Vehicle info not found");
+                throw new ResourseNotFoundException("Vehicle info not found");
             }
             gvar.DicOfDT["VehiclesInformations"] = new DataTable();
 
@@ -65,7 +65,7 @@ namespace FleetManagementAPI.Services
 
             if (vehiclesInfo == null || vehiclesInfo.Count == 0)
             {
-                throw new Exception("No vehicles info found");
+                throw new ResourseNotFoundException("No vehicles info found");
             }
 
             gvar.DicOfDT["VehiclesInformations"] = new DataTable();
