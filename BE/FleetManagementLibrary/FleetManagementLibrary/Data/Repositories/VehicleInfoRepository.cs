@@ -138,7 +138,7 @@ namespace FleetManagementLibrary.Data.Repositories
                                 VehicleID = Convert.ToInt64(reader["VehicleID"]),
                                 VehicleNumber = Convert.ToInt64(reader["VehicleNumber"]),
                                 VehicleType = reader["VehicleType"].ToString(),
-                                LastDirection = reader["VehicleDirection"] == DBNull.Value ? ' ' : Convert.ToInt32(reader["VehicleDirection"]),
+                                LastDirection = reader["VehicleDirection"] == DBNull.Value ? 0 : Convert.ToInt32(reader["VehicleDirection"]),
                                 LastStatus = reader["Status"] == DBNull.Value ? ' ' : Convert.ToChar(reader["Status"]),
                                 LastAddress = reader["Address"] == DBNull.Value ? "" : reader["Address"].ToString(),
                                 LastLatitude = reader["Latitude"] == DBNull.Value ? 0 : Convert.ToSingle(reader["Latitude"]),

@@ -1,13 +1,14 @@
 mat-form-field {
-    width: 90%;
+    width: 50%;
     height: 80px;
+    margin-left: 10px;
 }
 
 
 .toolbar {
     display: flex;
     justify-content: space-between;
-    width: 95%;
+    width: 100%;
 }
 
 .toolbar button {
@@ -19,36 +20,11 @@ mat-form-field {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin-right: 10px;
 }
 
 .actions {
     text-align: center;
-}
-
-.actions button {
-    margin: 0 10px;
-    border-radius: 10px;
-    border: none;
-    padding: 8px;
-    color: white;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.delete {
-    background-color: #F44336;
-}
-
-.edit {
-    background-color: #9575CD;
-}
-
-.more-info {
-    background-color: #FFC107;
-}
-
-.route-history {
-    background-color: #4CAF50;
 }
 
 th {
@@ -57,6 +33,7 @@ th {
 
 #table-container {
     overflow: auto;
+    margin-top: 10px;
 }
 
 #table-container mat-icon {

@@ -38,7 +38,6 @@ namespace FleetManagementAPI.Services
                 new DataColumn("GPSSpeed", typeof(string)),
                 new DataColumn("GPSTime", typeof(long))
             });
-
             foreach (var route in routes)
             {
                 var row = gvar.DicOfDT["RouteHistory"].NewRow();

@@ -30,6 +30,7 @@ export class DataTableComponent implements OnChanges, OnInit {
   getData() {
     this.service?.getAll(this.id).subscribe(
       (data: any) => {
+        console.log(data);
         this.data = data;
         this.updateTable();
         this.displayedColumns = Object.keys(this.data[0]);

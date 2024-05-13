@@ -22,6 +22,7 @@ export class VehicleService implements IService {
             vehicle.LastStatus.trim() === ''
           ) {
             vehicle.LastPosition = '';
+            vehicle.LastDirection = '';
           }
           return vehicle;
         })
@@ -73,7 +74,6 @@ export class VehicleService implements IService {
   }
 
   deleteVehicleInfo(entity: any): Observable<any> {
-    console.log(entity);
     return this.http.delete(`${this.infoApiUrl}/${entity.VehicleID}`);
   }
 
