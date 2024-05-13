@@ -17,11 +17,14 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
-import { SharedModule } from './shared/shared.module';
 import { DialogComponent } from './shared/modal/modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { GeofencesComponent } from './features/geofences/geofences.component';
 import { VehiclesComponent } from './features/vehicles/vehicles.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { DataTableComponent } from './shared/data-table/data-table.component';
+import { MatOption } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -31,6 +34,7 @@ import { VehiclesComponent } from './features/vehicles/vehicles.component';
     DialogComponent,
     GeofencesComponent,
     VehiclesComponent,
+    DataTableComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,8 +50,10 @@ import { VehiclesComponent } from './features/vehicles/vehicles.component';
     MatPaginatorModule,
     MatSortModule,
     MatInputModule,
-    SharedModule,
     ReactiveFormsModule,
+    MatMenuModule,
+    MatOption,
+    MatSelectModule,
   ],
   providers: [provideAnimationsAsync(), DriverService],
   bootstrap: [AppComponent],

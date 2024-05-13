@@ -19,24 +19,40 @@ namespace FleetManagementAPI.Services
 
             var vehicleInfo = _vehicleInfoRepository.GetVehicleInfo(vehicleId);
 
+
             if (vehicleInfo == null)
             {
                 throw new Exception("Vehicle info not found");
             }
+            gvar.DicOfDT["VehiclesInformations"] = new DataTable();
 
-            gvar.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
+            gvar.DicOfDT["VehiclesInformations"].Columns.AddRange(new DataColumn[]
+            {
+                new DataColumn("VehicleNumber", typeof(string)),
+                new DataColumn("VehicleType", typeof(string)),
+                new DataColumn("DriverName", typeof(string)),
+                new DataColumn("PhoneNumber", typeof(string)),
+                new DataColumn("LastPosition", typeof(string)),
+                new DataColumn("VehicleMake", typeof(string)),
+                new DataColumn("VehicleModel", typeof(string)),
+                new DataColumn("LastGPSTime", typeof(string)),
+                new DataColumn("LastGPSSpeed", typeof(string)),
+                new DataColumn("LastAddress", typeof(string))
+            });
 
-            gvar.DicOfDic["Tags"]["VehicleType"] = vehicleInfo.VehicleType;
-            gvar.DicOfDic["Tags"]["DriverName"] = vehicleInfo.DriverName;
-            gvar.DicOfDic["Tags"]["PhoneNumber"] = vehicleInfo.PhoneNumber.ToString();
-            gvar.DicOfDic["Tags"]["LastPosition"] = vehicleInfo.LastPosition.ToString();
-            gvar.DicOfDic["Tags"]["VehicleMake"] = vehicleInfo.VehicleMake;
-            gvar.DicOfDic["Tags"]["VehicleModel"] = vehicleInfo.VehicleModel;
-            gvar.DicOfDic["Tags"]["LastGPSTime"] = vehicleInfo.LastGPSTime.ToString();
-            gvar.DicOfDic["Tags"]["LastGPSSpeed"] = vehicleInfo.LastGPSSpeed;
-            gvar.DicOfDic["Tags"]["LastAddress"] = vehicleInfo.LastAddress;
+            var row = gvar.DicOfDT["VehiclesInformations"].NewRow();
+            row["VehicleNumber"] = vehicleInfo.VehicleNumber;
+            row["VehicleType"] = vehicleInfo.VehicleType;
+            row["DriverName"] = vehicleInfo.DriverName;
+            row["PhoneNumber"] = vehicleInfo.PhoneNumber;
+            row["LastPosition"] = vehicleInfo.LastPosition;
+            row["VehicleMake"] = vehicleInfo.VehicleMake;
+            row["VehicleModel"] = vehicleInfo.VehicleModel;
+            row["LastGPSTime"] = vehicleInfo.LastGPSTime;
+            row["LastGPSSpeed"] = vehicleInfo.LastGPSSpeed;
+            row["LastAddress"] = vehicleInfo.LastAddress;
 
-            Console.WriteLine("type",gvar.DicOfDic["Tags"]["VehicleType"]);
+            gvar.DicOfDT["VehiclesInformations"].Rows.Add(row);
 
             return gvar;
         }
@@ -52,9 +68,9 @@ namespace FleetManagementAPI.Services
                 throw new Exception("No vehicles info found");
             }
 
-            gvar.DicOfDT["VehiclesInfo"] = new DataTable();
+            gvar.DicOfDT["VehiclesInformations"] = new DataTable();
 
-            gvar.DicOfDT["VehiclesInfo"].Columns.AddRange(new DataColumn[]
+            gvar.DicOfDT["VehiclesInformations"].Columns.AddRange(new DataColumn[]
             {
                 new DataColumn("VehicleID", typeof(string)),
                 new DataColumn("VehicleNumber", typeof(string)),
@@ -67,16 +83,16 @@ namespace FleetManagementAPI.Services
 
             foreach (var vehicleInfo in vehiclesInfo)
             {
-                var row = gvar.DicOfDT["VehiclesInfo"].NewRow();
+                var row = gvar.DicOfDT["VehiclesInformations"].NewRow();
                 row["VehicleID"] = vehicleInfo.VehicleID;
                 row["VehicleNumber"] = vehicleInfo.VehicleNumber;
                 row["VehicleType"] = vehicleInfo.VehicleType;
                 row["LastDirection"] = vehicleInfo.LastDirection;
                 row["LastStatus"] = vehicleInfo.LastStatus;
                 row["LastAddress"] = vehicleInfo.LastAddress;
-                row["LastPosition"] = $"{vehicleInfo.LastLatitude},{vehicleInfo.LastLongitude}";
+                row["LastPosition"] = $"({vehicleInfo.LastLatitude},{vehicleInfo.LastLongitude})";
 
-                gvar.DicOfDT["VehiclesInfo"].Rows.Add(row);
+                gvar.DicOfDT["VehiclesInformations"].Rows.Add(row);
             }
             return gvar;
         }
@@ -92,6 +108,24 @@ namespace FleetManagementAPI.Services
                 PurchaseDate = Convert.ToInt64(gvar.DicOfDic["Tags"]["PurchaseDate"])
             };
             _vehicleInfoRepository.AddVehicleInfo(vehicleInfo);
+        }
+
+        public void UpdateVehicleInfo(GVAR gvar)
+        {
+            VehiclesInformations vehicleInfo = new VehiclesInformations()
+            {
+                VehicleID = Convert.ToInt64(gvar.DicOfDic["Tags"]["VehicleID"]),
+                DriverID = Convert.ToInt64(gvar.DicOfDic["Tags"]["DriverID"]),
+                VehicleMake = gvar.DicOfDic["Tags"]["VehicleMake"],
+                VehicleModel = gvar.DicOfDic["Tags"]["VehicleModel"],
+                PurchaseDate = Convert.ToInt64(gvar.DicOfDic["Tags"]["PurchaseDate"])
+            };
+            _vehicleInfoRepository.UpdateVehicleInfo(vehicleInfo);
+        }
+
+        public void DeleteVehicleInfo(long vehicleId)
+        {
+            _vehicleInfoRepository.DeleteVehicleInfo(vehicleId);
         }
     }
 }

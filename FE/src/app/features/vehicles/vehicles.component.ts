@@ -8,6 +8,6 @@ import { VehicleService } from '../../services/vehicle.service';
 })
 export class VehiclesComponent {
   fields = ['VehicleID', 'VehicleNumber', 'VehicleType'];
-  actions = ['MORE-INFO', 'ROUTE-HISTORY', 'EDIT', 'DELETE'];
+  actions = ['DETAILS', 'VEHICLE-INFO', 'ROUTE-HISTORY', 'EDIT', 'DELETE'];
   constructor(public vehicleService: VehicleService) {}
 }

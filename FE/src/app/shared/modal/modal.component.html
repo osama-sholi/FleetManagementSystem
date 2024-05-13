@@ -1,19 +1,70 @@
 <h2 mat-dialog-title>{{ data.purpose }} {{ data.entity }}</h2>
 
-<mat-dialog-content>
-  <form [formGroup]="formGroup" (ngSubmit)="onConfirm()">
-    <div *ngFor="let field of fields">
+<mat-dialog-content class="modal-container">
+  <form [formGroup]="formGroup" (ngSubmit)="onConfirm()" class="form-grid">
+    <div *ngFor="let field of fields" class="form-field">
       <mat-form-field>
         <mat-label>{{ field }}</mat-label>
-        <input matInput formControlName="{{ field }}" />
+        <ng-container *ngIf="field === 'Driver'; else inputField">
+          <mat-select formControlName="{{ field }}">
+            <mat-option
+              *ngFor="let driver of data.info"
+              [value]="driver.DriverID"
+            >
+              {{ driver.DriverID }}:{{ driver.DriverName }}
+            </mat-option>
+          </mat-select>
+        </ng-container>
+        <ng-template #inputField>
+          <input matInput formControlName="{{ field }}" />
+        </ng-template>
       </mat-form-field>
     </div>
 
-    <div>
-      <button mat-button (click)="onCancel()" type="button">Cancel</button>
-      <button mat-button type="submit" [disabled]="!formGroup.valid">
-        Confirm
+    <div class="form-buttons">
+      <button
+        *ngIf="data.purpose === 'DETAILS'"
+        mat-button
+        (click)="onCancel()"
+        type="button"
+      >
+        Close
       </button>
+      <ng-container *ngIf="data.purpose === 'VEHICLE-INFO'">
+        <button
+          mat-button
+          (click)="onDelete()"
+          type="button"
+          *ngIf="data.hasInfo === true"
+        >
+          Delete
+        </button>
+        <button
+          mat-button
+          (click)="onUpdate()"
+          [disabled]="!formGroup.valid"
+          *ngIf="data.hasInfo === true"
+        >
+          Update
+        </button>
+        <button
+          mat-button
+          (click)="onAdd()"
+          [disabled]="!formGroup.valid"
+          *ngIf="data.hasInfo === false"
+        >
+          Add
+        </button>
+        <button mat-button (click)="onCancel()" type="button">Cancel</button>
+      </ng-container>
+      <ng-container
+        *ngIf="data.purpose !== 'DETAILS' && data.purpose !== 'VEHICLE-INFO'"
+      >
+        <button mat-button (click)="onCancel()" type="button">Cancel</button>
+        <button mat-button type="submit" [disabled]="!formGroup.valid">
+          Confirm
+        </button>
+      </ng-container>
     </div>
   </form>
 </mat-dialog-content>

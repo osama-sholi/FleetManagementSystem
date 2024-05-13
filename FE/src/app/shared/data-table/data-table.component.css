@@ -58,3 +58,11 @@ th {
 #table-container {
     overflow: auto;
 }
+
+#table-container mat-icon {
+    color: black;
+}
+
+.actions {
+    width: 10px;
+}

@@ -27,18 +27,12 @@ export class DataTableComponent implements OnChanges, OnInit {
   }
 
   getData() {
-    this.service?.getAll().subscribe(
+    this.service?.getAll(0).subscribe(
       (data: any) => {
         this.data = data;
-        this.dataSource = new MatTableDataSource(this.data);
+        this.updateTable();
         this.displayedColumns = Object.keys(this.data[0]);
         if (this.actions.length > 0) this.displayedColumns.push('Actions');
-        if (this.paginator) {
-          this.dataSource.paginator = this.paginator;
-        }
-        if (this.sort) {
-          this.dataSource.sort = this.sort;
-        }
       },
       (error) => {
         // Error callback
@@ -47,6 +41,16 @@ export class DataTableComponent implements OnChanges, OnInit {
         });
       }
     );
+  }
+
+  updateTable() {
+    this.dataSource = new MatTableDataSource(this.data);
+    if (this.paginator) {
+      this.dataSource.paginator = this.paginator;
+    }
+    if (this.sort) {
+      this.dataSource.sort = this.sort;
+    }
   }
 
   data: any[] = [];
@@ -131,8 +135,12 @@ export class DataTableComponent implements OnChanges, OnInit {
         this.performEdit(element);
         break;
 
-      case 'MORE-INFO':
-        this.moreInfo(element);
+      case 'DETAILS':
+        this.details(element);
+        break;
+
+      case 'VEHICLE-INFO':
+        this.vehicleInfo(element);
         break;
     }
   };
@@ -145,7 +153,7 @@ export class DataTableComponent implements OnChanges, OnInit {
             duration: 2000,
           });
           this.data = this.data.filter((item) => item !== element);
-          this.dataSource = new MatTableDataSource(this.data);
+          this.updateTable();
         } else {
           this.snackBar.open('Delete Failed', 'Close', {
             duration: 2000,
@@ -188,7 +196,7 @@ export class DataTableComponent implements OnChanges, OnInit {
               });
               const index = this.data.findIndex((item) => item === element);
               this.data[index] = result;
-              this.dataSource = new MatTableDataSource(this.data);
+              this.updateTable();
             } else {
               this.snackBar.open('Update Failed', 'Close', {
                 duration: 2000,
@@ -213,25 +221,17 @@ export class DataTableComponent implements OnChanges, OnInit {
     });
   }
 
-  moreInfo(element: any) {
-    const data = this.getInfo(element);
-    const fields = data === null ? Object.keys(data) : [];
-    console.log(data);
-    console.log(fields);
-    const dialogRef = this.dialog.open(DialogComponent, {
-      data: {
-        data: data,
-        purpose: 'More-Info',
-        fields: fields,
-        element: element,
-      },
-    });
-  }
-
-  getInfo(element: any) {
-    this.service?.getInfo(element).subscribe(
+  details(element: any) {
+    this.service?.getDetails(element).subscribe(
       (data: any) => {
-        return data;
+        const fields = Object.keys(data[0]);
+        const dialogRef = this.dialog.open(DialogComponent, {
+          data: {
+            purpose: 'DETAILS',
+            fields: fields,
+            element: data[0],
+          },
+        });
       },
       (error) => {
         let errorMessage = 'An unknown error occurred!';
@@ -247,5 +247,81 @@ export class DataTableComponent implements OnChanges, OnInit {
         });
       }
     );
+  }
+
+  vehicleInfo(element: any) {
+    let hasInfo = false;
+    this.service?.getDetails(element).subscribe((details: any) => {
+      hasInfo =
+        details[0].VehicleMake.trim() === '' &&
+        details[0].VehicleModel.trim() === '' &&
+        details[0].DriverName.trim() === ''
+          ? false
+          : true;
+    });
+
+    this.service?.getInfo(element).subscribe((data: any) => {
+      const dialogRef = this.dialog.open(DialogComponent, {
+        data: {
+          purpose: 'VEHICLE-INFO',
+          fields: ['Driver', 'VehicleMake', 'VehicleModel', 'PurchaseDate'],
+          info: data,
+          hasInfo: hasInfo,
+          element: element,
+        },
+      });
+
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          switch (result.action) {
+            case 'delete':
+              this.service?.deleteVehicleInfo(result.data).subscribe(
+                (data: any) => {
+                  this.snackBar.open('Delete Successful', 'Close', {
+                    duration: 2000,
+                  });
+                  this.updateTable();
+                },
+                (error) => {
+                  this.snackBar.open('Delete Failed', 'Close', {
+                    duration: 2000,
+                  });
+                }
+              );
+              break;
+            case 'add':
+              this.service?.addVehicleInfo(result.data).subscribe(
+                (data: any) => {
+                  this.snackBar.open('Add Successful', 'Close', {
+                    duration: 2000,
+                  });
+                  this.updateTable();
+                },
+                (error) => {
+                  this.snackBar.open('Add Failed', 'Close', {
+                    duration: 2000,
+                  });
+                }
+              );
+              break;
+            case 'update':
+              this.service?.updateVehicleInfo(result.data).subscribe(
+                (data: any) => {
+                  this.snackBar.open('Update Successful', 'Close', {
+                    duration: 2000,
+                  });
+                  this.updateTable();
+                },
+                (error) => {
+                  this.snackBar.open('Update Failed', 'Close', {
+                    duration: 2000,
+                  });
+                }
+              );
+              break;
+          }
+        }
+      });
+    });
   }
 }

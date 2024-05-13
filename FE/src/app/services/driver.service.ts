@@ -38,4 +38,20 @@ export class DriverService implements IService {
   getInfo(id: number): Observable<any> {
     return new Observable();
   }
+
+  getDetails(entity: any): Observable<any> {
+    return new Observable();
+  }
+
+  addVehicleInfo(entity: any): Observable<any> {
+    return new Observable();
+  }
+
+  updateVehicleInfo(entity: any): Observable<any> {
+    return new Observable();
+  }
+
+  deleteVehicleInfo(entity: any): Observable<any> {
+    return new Observable();
+  }
 }

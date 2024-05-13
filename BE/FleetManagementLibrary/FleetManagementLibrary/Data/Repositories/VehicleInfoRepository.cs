@@ -190,14 +190,13 @@ namespace FleetManagementLibrary.Data.Repositories
                         {
                             float latitude = reader["Latitude"] == DBNull.Value ? 0 : Convert.ToSingle(reader["Latitude"]);
                             float longitude = reader["Longitude"] == DBNull.Value ? 0 : Convert.ToSingle(reader["Longitude"]);
-
                             return new VehicleInfo
                             {
                                 VehicleNumber = Convert.ToInt64(reader["VehicleNumber"]),
                                 VehicleType = reader["VehicleType"].ToString(),
                                 DriverName = reader["DriverName"] == DBNull.Value ? "" : reader["DriverName"].ToString(),
                                 PhoneNumber = reader["PhoneNumber"] == DBNull.Value ? 0 : Convert.ToInt64(reader["PhoneNumber"]),
-                                LastPosition = (latitude, longitude),
+                                LastPosition = (latitude,longitude),
                                 VehicleMake = reader["VehicleMake"] == DBNull.Value ? "" : reader["VehicleMake"].ToString(),
                                 VehicleModel = reader["VehicleModel"] == DBNull.Value ? "" : reader["VehicleModel"].ToString(),
                                 LastGPSTime = reader["RecordTime"] == DBNull.Value ? 0 : Convert.ToInt64(reader["RecordTime"]),

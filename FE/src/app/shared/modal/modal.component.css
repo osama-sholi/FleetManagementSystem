@@ -1,0 +1,19 @@
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-auto-rows: auto;
+    grid-gap: 1em;
+}
+
+.form-field {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+.form-buttons {
+    grid-column: span 2;
+}
+
+mat-form-field input {
+    color: black !important;
+}

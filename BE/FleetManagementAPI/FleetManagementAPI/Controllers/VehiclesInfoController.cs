@@ -21,10 +21,11 @@ namespace FleetManagementAPI.Controllers
         {
             try
             {
-                Console.WriteLine("VehicleId: " + vehicleId);
                 GVAR gvar = _vehicleInfoService.GetVehicleInfo(vehicleId);
+                gvar.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
                 gvar.DicOfDic["Tags"]["STS"] = "1";
-                return Ok(gvar);
+                String json = JsonConvert.SerializeObject(gvar);
+                return Ok(json);
             }
             catch (System.Exception ex)
             {
@@ -73,6 +74,43 @@ namespace FleetManagementAPI.Controllers
             {
                 Console.WriteLine(ex);
                 answer.DicOfDic["Tags"]["STS"] = "0";
+                return BadRequest(answer);
+            }
+        }
+
+        [HttpPut]
+        public IActionResult UpdateVehicleInfo([FromBody] GVAR gvar)
+        {
+            GVAR answer = new GVAR();
+            answer.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
+            answer.DicOfDic["Tags"]["STS"] = "1";
+            try
+            {
+                _vehicleInfoService.UpdateVehicleInfo(gvar);
+                return Ok(answer);
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex);
+                answer.DicOfDic["Tags"]["STS"] = "0";
+                return BadRequest(answer);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteVehicleInfo(long id)
+        {
+            GVAR answer = new GVAR();
+            answer.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
+            answer.DicOfDic["Tags"]["STS"] = "1";
+            try
+            {
+                _vehicleInfoService.DeleteVehicleInfo(id);
+                return Ok(answer);
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex);
                 return BadRequest(answer);
             }
         }
