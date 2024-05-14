@@ -15,11 +15,11 @@ namespace FleetManagementAPI.Controllers
         {
             _vehicleInfoService = vehicleInfoService;
         }
+
+        // POST: api/VehiclesInfo
         [HttpPost]
         public IActionResult AddVehicleInfo([FromBody] GVAR gvar)
         {
-            Console.WriteLine("gvar.DicOfDT");
-
             GVAR answer = new GVAR();
             answer.DicOfDic["Tags"] = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
             answer.DicOfDic["Tags"]["STS"] = "1";
@@ -35,6 +35,8 @@ namespace FleetManagementAPI.Controllers
                 return BadRequest(answer);
             }
         }
+
+        // GET: api/VehiclesInfo/{vehicleId}
         [HttpGet("{vehicleId}")]
         public IActionResult GetVehicleInfo(long vehicleId)
         {
@@ -64,6 +66,7 @@ namespace FleetManagementAPI.Controllers
             }
         }
 
+        // GET: api/VehiclesInfo
         [HttpGet]
         public IActionResult GetVehiclesInfo()
         {
@@ -94,7 +97,7 @@ namespace FleetManagementAPI.Controllers
         }
 
 
-
+        // PUT: api/VehiclesInfo
         [HttpPut]
         public IActionResult UpdateVehicleInfo([FromBody] GVAR gvar)
         {
@@ -114,6 +117,7 @@ namespace FleetManagementAPI.Controllers
             }
         }
 
+        // DELETE: api/VehiclesInfo/{id}
         [HttpDelete("{id}")]
         public IActionResult DeleteVehicleInfo(long id)
         {

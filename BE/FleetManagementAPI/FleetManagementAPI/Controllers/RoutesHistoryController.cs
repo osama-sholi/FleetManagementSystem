@@ -16,6 +16,7 @@ namespace FleetManagementAPI.Controllers
             _routesHistoryService = routesHistoryService;
         }
 
+        // GET: api/RoutesHistory/{vehicleId}/{startDate}/{endDate}
         [HttpGet("{vehicleId}/{startDate}/{endDate}")]
         public IActionResult GetRoutesHistory(long vehicleId, long startDate, long endDate)
         {
@@ -45,6 +46,7 @@ namespace FleetManagementAPI.Controllers
             }
         }
 
+        // POST: api/RoutesHistory
         [HttpPost]
         public IActionResult AddRouteHistory([FromBody] GVAR gvar)
         {

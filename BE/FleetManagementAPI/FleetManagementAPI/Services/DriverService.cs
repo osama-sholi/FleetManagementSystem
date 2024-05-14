@@ -19,15 +19,19 @@ namespace FleetManagementAPI.Services
             var drivers = _driverRepository.GetAllDrivers();
             if (drivers == null || drivers.Count == 0)
             {
-                throw new ResourseNotFoundException("No drivers found");
+                throw new ResourseNotFoundException("No drivers found"); // Custom exception
             }
+
+            // Create a new data table
             gvar.DicOfDT["Drivers"] = new System.Data.DataTable();
             gvar.DicOfDT["Drivers"].Columns.AddRange(new System.Data.DataColumn[]
             {
-                new System.Data.DataColumn("DriverID", typeof(long)),
+                new System.Data.DataColumn("DriverID", typeof(string)),
                 new System.Data.DataColumn("DriverName", typeof(string)),
-                new System.Data.DataColumn("PhoneNumber", typeof(long))
+                new System.Data.DataColumn("PhoneNumber", typeof(string))
             });
+
+            // Fill the data table with the data from the database
             foreach (var driver in drivers)
             {
                 var row = gvar.DicOfDT["Drivers"].NewRow();

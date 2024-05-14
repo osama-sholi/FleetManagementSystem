@@ -5,7 +5,7 @@
 -- Dumped from database version 16.2
 -- Dumped by pg_dump version 16.2
 
--- Started on 2024-05-13 07:05:15
+-- Started on 2024-05-14 15:57:33
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -431,22 +431,22 @@ COPY public.circlegeofence (id, geofenceid, radius, latitude, longitude) FROM st
 --
 
 COPY public.driver (driverid, drivername, phonenumber) FROM stdin;
-1	John Doe	1234567890
-2	Jane Smith	2345678901
 3	Bob Johnson	3456789012
 4	Alice Williams	4567890123
 5	Charlie Brown	5678901234
-18	awdsa	12314
-19	awdsadaaa	123124123
-20	awdshaha	1234123
-24	asdaw	1231245
-25	asdawe	1231223
-26	asde	123412
-27	asdafaf	123124123
-29	asd	123142
-30	asd	1232143
-31	asd	123
-21	asdwas	123112
+32	David Smith	3456789012
+33	Emily Davis	4567890123
+34	Frank Miller	5678901234
+35	Grace Lee	6789012345
+36	Henry Wilson	7890123456
+37	Isabella Thompson	8901234567
+38	Jack Anderson	9012345678
+39	osama sholi	59785
+40	Robert Smith	9876543210
+41	osama	98756
+2	Jane Smith	23456789015
+44	osama	123513212
+46	adw	4123
 \.
 
 
@@ -512,8 +512,11 @@ COPY public.rectanglegeofence (id, geofenceid, north, east, west, south) FROM st
 --
 
 COPY public.routehistory (routehistoryid, vehicleid, vehicledirection, status, vehiclespeed, address, latitude, longitude, recordtime) FROM stdin;
-6	1	90	1	60 mph	123 Main St	40.7128	-74.006	1614556800
-7	2	180	0	50 mph	456 Broadway	40.759	-73.9845	1614643200
+27	11	130	1	200	street	120	43	1715691141
+28	11	32	0	0	street1	12	-20	1715691160
+29	8	23	1	42	city	12	-90	1715691213
+30	8	12	0	123	yes	12.5	327	1715691233
+31	8	31	1	25	street4	12	32	1715691266
 \.
 
 
@@ -524,11 +527,11 @@ COPY public.routehistory (routehistoryid, vehicleid, vehicledirection, status, v
 --
 
 COPY public.vehicles (vehicleid, vehiclenumber, vehicletype) FROM stdin;
-1	1234567890	Truck
-2	2345678901	Car
-9	125348	bus
 11	12345	test
 8	125348	busa
+13	1236543	qwe
+14	1231426	Engine Bike
+15	3245	Van
 \.
 
 
@@ -539,7 +542,8 @@ COPY public.vehicles (vehicleid, vehiclenumber, vehicletype) FROM stdin;
 --
 
 COPY public.vehiclesinformations (id, vehicleid, driverid, vehiclemake, vehiclemodel, purchasedate) FROM stdin;
-8	2	2	Make2	Model2	324534213
+20	8	40	awd	asdw	1718367872
+21	11	3	make	model	1715691126
 \.
 
 
@@ -558,7 +562,7 @@ SELECT pg_catalog.setval('public.circlegeofence_id_seq', 12, true);
 -- Name: drivers_driverid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.drivers_driverid_seq', 31, true);
+SELECT pg_catalog.setval('public.drivers_driverid_seq', 46, true);
 
 
 --
@@ -594,7 +598,7 @@ SELECT pg_catalog.setval('public.rectanglegeofence_id_seq', 6, true);
 -- Name: routehistory_routehistoryid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.routehistory_routehistoryid_seq', 14, true);
+SELECT pg_catalog.setval('public.routehistory_routehistoryid_seq', 31, true);
 
 
 --
@@ -603,7 +607,7 @@ SELECT pg_catalog.setval('public.routehistory_routehistoryid_seq', 14, true);
 -- Name: vehicles_vehicleid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.vehicles_vehicleid_seq', 12, true);
+SELECT pg_catalog.setval('public.vehicles_vehicleid_seq', 18, true);
 
 
 --
@@ -612,7 +616,7 @@ SELECT pg_catalog.setval('public.vehicles_vehicleid_seq', 12, true);
 -- Name: vehiclesinformations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.vehiclesinformations_id_seq', 10, true);
+SELECT pg_catalog.setval('public.vehiclesinformations_id_seq', 21, true);
 
 
 --
@@ -750,7 +754,7 @@ ALTER TABLE ONLY public.vehiclesinformations
     ADD CONSTRAINT vehiclesinformations_vehicleid_fkey FOREIGN KEY (vehicleid) REFERENCES public.vehicles(vehicleid) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
 
 
--- Completed on 2024-05-13 07:05:16
+-- Completed on 2024-05-14 15:57:33
 
 --
 -- PostgreSQL database dump complete

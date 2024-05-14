@@ -21,11 +21,11 @@ namespace FleetManagementAPI.Services
 
             if (routes == null || routes.Count == 0)
             {
-                throw new ResourseNotFoundException("No routes found");
+                throw new ResourseNotFoundException("No routes found"); // Custom exception
             }
 
+            // Create a new data table
             gvar.DicOfDT["RouteHistory"] = new DataTable();
-
             gvar.DicOfDT["RouteHistory"].Columns.AddRange(new DataColumn[]
             {
                 new DataColumn("VehicleID", typeof(long)),
@@ -38,6 +38,8 @@ namespace FleetManagementAPI.Services
                 new DataColumn("GPSSpeed", typeof(string)),
                 new DataColumn("GPSTime", typeof(long))
             });
+
+            // Fill the data table with the data from the database
             foreach (var route in routes)
             {
                 var row = gvar.DicOfDT["RouteHistory"].NewRow();

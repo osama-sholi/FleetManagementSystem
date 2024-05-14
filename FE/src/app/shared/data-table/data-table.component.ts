@@ -1,13 +1,4 @@
-import {
-  Component,
-  Input,
-  ViewChild,
-  OnChanges,
-  SimpleChanges,
-  OnInit,
-  input,
-} from '@angular/core';
-
+import { Component, Input, ViewChild, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -16,21 +7,45 @@ import { DialogComponent } from '../modal/modal.component';
 import { IService } from '../../services/IService';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { VehicleService } from '../../services/vehicle.service';
+import { GeofenceService } from '../../services/geofence.service';
 
 @Component({
   selector: 'app-data-table',
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.css'],
 })
-export class DataTableComponent implements OnChanges, OnInit {
+// I know, the class is too long, but this is for the reusability of the component, and it's impossible for me break it down into smaller components,
+// sure it could be better, but I'm not sure how to do it, so I'm leaving it as it is.
+export class DataTableComponent implements OnInit {
+  constructor(
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private router: Router,
+    private vehicleService: VehicleService,
+    private geofenceService: GeofenceService
+  ) {}
+
   ngOnInit() {
     this.getData();
   }
 
+  data: any[] = [];
+  displayedColumns: string[] = [];
+  @Input() fields: string[] = []; // Fields for the modal (dialog)
+  @Input() add: boolean = false; // Does the table have an add button
+  @Input() service: IService | undefined; // Service to get data from
+  @Input() entity: string = ''; // Entity name
+  @Input() actions: string[] = []; // Actions to be performed on the data
+  @Input() id: number | null = 0; // ID of the entity (currently only used for Route-History)
+  dataSource: MatTableDataSource<any> = new MatTableDataSource(); // Data source for the table
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined; // Paginator for the table
+  @ViewChild(MatSort) sort: MatSort | undefined; // Sort for the table
+
+  // Gets data from the service
   getData() {
     this.service?.getAll(this.id).subscribe(
       (data: any) => {
-        console.log(data);
         this.data = data;
         this.updateTable();
         this.displayedColumns = Object.keys(this.data[0]);
@@ -52,6 +67,7 @@ export class DataTableComponent implements OnChanges, OnInit {
     );
   }
 
+  // Updates the table with the new data
   updateTable() {
     this.dataSource = new MatTableDataSource(this.data);
     if (this.paginator) {
@@ -62,57 +78,31 @@ export class DataTableComponent implements OnChanges, OnInit {
     }
   }
 
-  data: any[] = [];
-  displayedColumns: string[] = [];
-  @Input() fields: string[] = [];
-  @Input() add: boolean = false;
-  @Input() service: IService | undefined;
-  @Input() entity: string = '';
-  @Input() actions: string[] = [];
-  @Input() id: number | null = 0;
-  @Input() isHistory: boolean = false;
-  dataSource: MatTableDataSource<any> = new MatTableDataSource();
-
-  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
-  @ViewChild(MatSort) sort: MatSort | undefined;
-
-  constructor(
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar,
-    private router: Router
-  ) {}
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['data'] && this.data) {
-      this.dataSource.data = this.data;
-    }
-    if (changes['displayedColumns'] || changes['actions']) {
-      this.displayedColumns = [...this.displayedColumns, 'Actions'];
-    }
-  }
-
+  // Used for searching the table
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
 
+  // Opens the modal for adding a new row
   addRow() {
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {
-        id: this.id,
-        purpose: 'ADD',
-        history: this.isHistory,
-        fields: this.fields.length === 0 ? this.displayedColumns : this.fields,
+        id: this.id, // ID of the entity (currently only used for Route-History)
+        purpose: 'ADD', // Purpose of the modal
+        history: this.entity === 'Route-History' ? true : false, // Is it a route history modal
+        fields: this.fields.length === 0 ? this.displayedColumns : this.fields, // Fields for the modal, if not provided, use the displayed columns
       },
     });
 
+    // After the modal is closed, add the new row to the dataBase
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.service?.add(result).subscribe(
           (data: any) => {
+            // If the data was added successfully, show a snackbar message and update the table(using STS tag in the response GVAR)
             if (data['DicOfDic']['Tags']['STS'] === '1') {
               this.snackBar.open('Added Successfully', 'Close', {
                 duration: 2000,
@@ -142,6 +132,7 @@ export class DataTableComponent implements OnChanges, OnInit {
     });
   }
 
+  // Performs the clicked action
   performAction = (action: string, element: any) => {
     switch (action) {
       case 'DELETE':
@@ -152,7 +143,7 @@ export class DataTableComponent implements OnChanges, OnInit {
         break;
 
       case 'DETAILS':
-        this.details(element);
+        this.vehicleDetails(element);
         break;
 
       case 'VEHICLE-INFO':
@@ -165,9 +156,11 @@ export class DataTableComponent implements OnChanges, OnInit {
     }
   };
 
+  // Performs the delete action
   performDelete(element: any) {
     this.service?.delete(element).subscribe(
       (data: any) => {
+        // If the data was deleted successfully, show a snackbar message and update the table(using STS tag in the response GVAR)
         if (data['DicOfDic']['Tags']['STS'] === '1') {
           this.snackBar.open('Deleted Successfully', 'Close', {
             duration: 2000,
@@ -196,6 +189,7 @@ export class DataTableComponent implements OnChanges, OnInit {
     );
   }
 
+  // Performs the edit action (opens the modal for editing)
   performEdit(element: any) {
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {
@@ -206,10 +200,12 @@ export class DataTableComponent implements OnChanges, OnInit {
       },
     });
 
+    // After the modal is closed, update the row in the dataBase
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.service?.update(result).subscribe(
           (data: any) => {
+            // If the data was updated successfully, show a snackbar message and update the table(using STS tag in the response GVAR)
             if (data['DicOfDic']['Tags']['STS'] === '1') {
               this.snackBar.open('Updated Successfully', 'Close', {
                 duration: 2000,
@@ -241,8 +237,9 @@ export class DataTableComponent implements OnChanges, OnInit {
     });
   }
 
-  details(element: any) {
-    this.service?.getDetails(element).subscribe(
+  // Gets the details of the vehicle
+  vehicleDetails(element: any) {
+    this.vehicleService?.getDetails(element).subscribe(
       (data: any) => {
         const fields = Object.keys(data[0]);
         const dialogRef = this.dialog.open(DialogComponent, {
@@ -269,9 +266,10 @@ export class DataTableComponent implements OnChanges, OnInit {
     );
   }
 
+  // Performs Add, Update, Delete operations on the vehicle info depending on if the vehicle has info or not
   vehicleInfo(element: any) {
     let hasInfo: boolean;
-    this.service?.getDetails(element).subscribe((details: any) => {
+    this.vehicleService?.getDetails(element).subscribe((details: any) => {
       hasInfo =
         details[0].VehicleMake.trim() === '' &&
         details[0].VehicleModel.trim() === '' &&
@@ -279,7 +277,7 @@ export class DataTableComponent implements OnChanges, OnInit {
           ? false
           : true;
 
-      this.service?.getInfo(element).subscribe((data: any) => {
+      this.vehicleService?.getInfo(element).subscribe((data: any) => {
         const dialogRef = this.dialog.open(DialogComponent, {
           data: {
             purpose: 'VEHICLE-INFO',
@@ -290,11 +288,14 @@ export class DataTableComponent implements OnChanges, OnInit {
           },
         });
 
+        // After the modal is closed, perform the action on the vehicle info
         dialogRef.afterClosed().subscribe((result) => {
           if (result) {
+            // perform the action on the vehicle info
             switch (result.action) {
+              // Delete the vehicle info
               case 'delete':
-                this.service?.deleteVehicleInfo(result.data).subscribe(
+                this.vehicleService?.deleteVehicleInfo(result.data).subscribe(
                   (data: any) => {
                     this.snackBar.open('Delete Successful', 'Close', {
                       duration: 2000,
@@ -308,8 +309,9 @@ export class DataTableComponent implements OnChanges, OnInit {
                   }
                 );
                 break;
+              // Add the vehicle info
               case 'add':
-                this.service?.addVehicleInfo(result.data).subscribe(
+                this.vehicleService?.addVehicleInfo(result.data).subscribe(
                   (data: any) => {
                     this.snackBar.open('Add Successful', 'Close', {
                       duration: 2000,
@@ -323,8 +325,9 @@ export class DataTableComponent implements OnChanges, OnInit {
                   }
                 );
                 break;
+              // Update the vehicle info
               case 'update':
-                this.service?.updateVehicleInfo(result.data).subscribe(
+                this.vehicleService?.updateVehicleInfo(result.data).subscribe(
                   (data: any) => {
                     this.snackBar.open('Update Successful', 'Close', {
                       duration: 2000,

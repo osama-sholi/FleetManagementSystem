@@ -21,6 +21,7 @@ namespace FleetManagementLibrary.Data.Repositories
         {
             // SQL query to insert a new vehicle info into the VehiclesInformations table which has the VehicleID which refrences the vehicle table,
             // DriverID which refrences the driver table, VehicleMake, VehicleModel, PurchaseDate columns
+            // Keep in mind that the foreign key VehicleID is unique in the VehiclesInformations table
 
             string query =
                 "INSERT INTO VehiclesInformations (VehicleID,DriverID,VehicleMake,VehicleModel,PurchaseDate) " +
@@ -134,7 +135,7 @@ namespace FleetManagementLibrary.Data.Repositories
                         while (reader.Read())
                         {
                             allVehiclesInfo.Add(new AllVehiclesInfo
-                            {
+                            { // We check if the value is DBNull before converting it to the desired type since we are doing a left join
                                 VehicleID = Convert.ToInt64(reader["VehicleID"]),
                                 VehicleNumber = Convert.ToInt64(reader["VehicleNumber"]),
                                 VehicleType = reader["VehicleType"].ToString(),
@@ -163,18 +164,17 @@ namespace FleetManagementLibrary.Data.Repositories
             // DriverName, PhoneNumber from the Drivers table by joining the Drivers table with the joined tables above
             // LastPosition(Latitude,Longitude), LastGPSTime(RecordTime), LastGPSSpeed(Speed) and LastAddress from the RouteHistory table by joining the last recorded record for the vehicle with the joined tables above
 
-            string query =
-    "SELECT v.VehicleNumber, v.VehicleType, vi.VehicleMake, vi.VehicleModel, d.DriverName, d.PhoneNumber, " +
-    "rh.Latitude, rh.longitude, rh.RecordTime, rh.VehicleSpeed, rh.Address " +
-    "FROM Vehicles v " +
-    "LEFT JOIN VehiclesInformations vi on v.VehicleID = vi.VehicleID " +
-    "LEFT JOIN Driver d on vi.DriverID = d.DriverID " +
-    "LEFT JOIN ( " + // Subquery to get the last record for the vehicle
-    "SELECT VehicleID, Latitude, Longitude, MAX(RecordTime) as RecordTime, VehicleSpeed, Address " +
-    "FROM RouteHistory " +
-    "GROUP BY VehicleID, Latitude, Longitude, VehicleSpeed, Address) " + // End of subquery
-    "rh on v.VehicleID = rh.VehicleID " +
-    "WHERE v.VehicleID = @VehicleID";
+            string query = "SELECT v.VehicleNumber, v.VehicleType, vi.VehicleMake, vi.VehicleModel, d.DriverName, d.PhoneNumber, " +
+                           "rh.Latitude, rh.longitude, rh.RecordTime, rh.VehicleSpeed, rh.Address " +
+                           "FROM Vehicles v " +
+                           "LEFT JOIN VehiclesInformations vi on v.VehicleID = vi.VehicleID " +
+                           "LEFT JOIN Driver d on vi.DriverID = d.DriverID " +
+                           "LEFT JOIN ( " + // Subquery to get the last record for the vehicle
+                           "SELECT VehicleID, Latitude, Longitude, MAX(RecordTime) as RecordTime, VehicleSpeed, Address " +
+                           "FROM RouteHistory " +
+                           "GROUP BY VehicleID, Latitude, Longitude, VehicleSpeed, Address) " + // End of subquery
+                           "rh on v.VehicleID = rh.VehicleID " +
+                           "WHERE v.VehicleID = @VehicleID";
 
 
             using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
@@ -188,7 +188,7 @@ namespace FleetManagementLibrary.Data.Repositories
                     using (var reader = command.ExecuteReader())
                     {
                         if (reader.Read())
-                        {
+                        {// We check if the value is DBNull before converting it to the desired type since we are doing a left join
                             float latitude = reader["Latitude"] == DBNull.Value ? 0 : Convert.ToSingle(reader["Latitude"]);
                             float longitude = reader["Longitude"] == DBNull.Value ? 0 : Convert.ToSingle(reader["Longitude"]);
                             return new VehicleInfo

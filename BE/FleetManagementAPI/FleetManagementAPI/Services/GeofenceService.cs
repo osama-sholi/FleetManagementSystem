@@ -20,15 +20,13 @@ namespace FleetManagementAPI.Services
 
             if(geofences == null || geofences.Count == 0)
             {
-                throw new ResourseNotFoundException("No geofences found");
+                throw new ResourseNotFoundException("No geofences found"); // Custom exception
             }
 
             GVAR gvar = new GVAR();
 
             // Create a new data table
             gvar.DicOfDT["Geofences"] = new DataTable();
-
-            // Add columns to the data table
             gvar.DicOfDT["Geofences"].Columns.AddRange(new DataColumn[]
             {
                 new DataColumn("GeofenceID"),
@@ -41,6 +39,7 @@ namespace FleetManagementAPI.Services
                 new DataColumn("FillOpacity")
             });
 
+            // Fill the data table with the data from the database
             foreach (var geofence in geofences)
             {
                 var row = gvar.DicOfDT["Geofences"].NewRow();
@@ -63,13 +62,13 @@ namespace FleetManagementAPI.Services
 
             if(geofences == null || geofences.Count == 0)
             {
-                throw new ResourseNotFoundException("No circular geofences found");
+                throw new ResourseNotFoundException("No circular geofences found"); // Custom exception
             }
 
             GVAR gvar = new GVAR();
 
+            // Create a new data table
             gvar.DicOfDT["CircularGeofences"] = new DataTable();
-
             gvar.DicOfDT["CircularGeofences"].Columns.AddRange(new DataColumn[]
             {
                 new DataColumn("ID"),
@@ -79,6 +78,7 @@ namespace FleetManagementAPI.Services
                 new DataColumn("Radius")
             });
 
+            // Fill the data table with the data from the database
             foreach (var geofence in geofences)
             {
                 var row = gvar.DicOfDT["CircularGeofences"].NewRow();
@@ -99,13 +99,13 @@ namespace FleetManagementAPI.Services
 
             if(geofences == null || geofences.Count == 0)
             {
-                throw new ResourseNotFoundException("No rectangular geofences found");
+                throw new ResourseNotFoundException("No rectangular geofences found"); // Custom exception
             }
 
             GVAR gvar = new GVAR();
 
+            // Create a new data table
             gvar.DicOfDT["RectangleGeofences"] = new DataTable();
-
             gvar.DicOfDT["RectangleGeofences"].Columns.AddRange(new DataColumn[]
             {
                 new DataColumn("ID"),
@@ -116,6 +116,7 @@ namespace FleetManagementAPI.Services
                 new DataColumn("South")
             });
 
+            // Fill the data table with the data from the database
             foreach (var geofence in geofences)
             {
                 var row = gvar.DicOfDT["RectangleGeofences"].NewRow();
@@ -139,13 +140,13 @@ namespace FleetManagementAPI.Services
 
             if(geofences == null || geofences.Count == 0)
             {
-                throw new ResourseNotFoundException("No polygon geofences found");
+                throw new ResourseNotFoundException("No polygon geofences found"); // Custom exception
             }
 
             GVAR gvar = new GVAR();
 
+            // Create a new data table
             gvar.DicOfDT["PolygonGeofences"] = new DataTable();
-
             gvar.DicOfDT["PolygonGeofences"].Columns.AddRange(new DataColumn[]
             {
                 new DataColumn("ID"),
@@ -154,6 +155,7 @@ namespace FleetManagementAPI.Services
                 new DataColumn("Longitude")
             });
 
+            // Fill the data table with the data from the database
             foreach (var geofence in geofences)
             {
                 var row = gvar.DicOfDT["PolygonGeofences"].NewRow();

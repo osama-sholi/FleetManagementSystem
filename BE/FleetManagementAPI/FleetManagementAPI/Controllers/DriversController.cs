@@ -15,6 +15,7 @@ namespace FleetManagementAPI.Controllers
             _driverService = driverService;
         }
 
+        // GET: api/Drivers
         [HttpGet]
         public IActionResult GetDrivers()
         {
@@ -44,6 +45,7 @@ namespace FleetManagementAPI.Controllers
             }
         }
 
+        // POST: api/Drivers
         [HttpPost]
         public IActionResult AddDriver([FromBody]GVAR gvar)
         {
@@ -65,6 +67,7 @@ namespace FleetManagementAPI.Controllers
             }
         }
 
+        // DELETE: api/Drivers/{id}
         [HttpDelete("{id}")]
         public IActionResult DeleteDriver(long id)
         {
@@ -83,6 +86,7 @@ namespace FleetManagementAPI.Controllers
             }
         }
 
+        // PUT: api/Drivers
         [HttpPut]
         public IActionResult UpdateDriver([FromBody] GVAR gvar)
         {

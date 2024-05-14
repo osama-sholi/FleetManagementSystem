@@ -16,6 +16,7 @@ namespace FleetManagementAPI.Controllers
             _geofenceService = geofenceService;
         }
 
+        // GET: api/Geofences
         [HttpGet]
         public IActionResult GetGeofences()
         {
@@ -46,6 +47,7 @@ namespace FleetManagementAPI.Controllers
 
         }
 
+        // GET: api/Geofences/circular
         [HttpGet("circular")]
         public IActionResult GetCircularGeofences()
         {
@@ -75,6 +77,7 @@ namespace FleetManagementAPI.Controllers
             }
         }
 
+        // GET: api/Geofences/rectangular
         [HttpGet("rectangular")]
         public IActionResult GetRectangularGeofences()
         {
@@ -104,6 +107,7 @@ namespace FleetManagementAPI.Controllers
             }
         }
 
+        // GET: api/Geofences/polygon
         [HttpGet("polygon")]
         public IActionResult GetPolygonGeofences()
         {

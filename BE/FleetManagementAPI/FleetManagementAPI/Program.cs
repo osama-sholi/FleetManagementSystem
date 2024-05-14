@@ -1,35 +1,48 @@
 using FleetManagementAPI.Services;
 using FPro;
-using System.Net.WebSockets;
-using System.Text;
-using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
+const string frontEndOrigin = "http://localhost:4200"; ;
+
+// Get the connection string from the appsettings.json file
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-if (connectionString == null)
+try
 {
-    throw new Exception("Connection string not found");
+    if (connectionString == null)
+    {
+        throw new Exception("Connection string not found");
+    }
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex);
+    return;
 }
 
+// Services
 
-// Add services to the container.
-
+// Configure JSON serialization options for controllers
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
+    // Disable automatic property name conversion to camel case
     options.JsonSerializerOptions.PropertyNamingPolicy = null;
 });
+
+// Configure CORS to allow requests from a specific origin
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
         builder =>
         {
-            builder.WithOrigins("http://localhost:4200")
+            builder.WithOrigins(frontEndOrigin)
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         });
 });
+
+// Add additional services
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<WebSocketService>();
@@ -44,13 +57,20 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    // Enable Swagger for documenting the API
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
+
+// Enable CORS
 app.UseCors("AllowSpecificOrigin");
+
+// Enable WebSockets
 app.UseWebSockets();
+
+// Handle WebSocket connections
 app.Use(async (context, next) =>
 {
     if (context.Request.Path == "/api/ws")

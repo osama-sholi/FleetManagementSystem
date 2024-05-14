@@ -8,9 +8,11 @@ import { GVAR } from '../models/gvar.model';
   providedIn: 'root',
 })
 export class DriverService implements IService {
+  // Implementing IService interface
   private apiUrl = 'http://localhost:5179/api/Drivers';
   constructor(private http: HttpClient) {}
 
+  // Get all drivers
   getAll(): Observable<any> {
     let gvarObservable: Observable<any> = this.http.get<any>(this.apiUrl);
     let dicOfDTObservable = gvarObservable.pipe(
@@ -19,12 +21,14 @@ export class DriverService implements IService {
     return dicOfDTObservable;
   }
 
+  // Add driver
   add(entity: any): Observable<any> {
     var gvar = new GVAR();
     gvar.DicOfDic['Tags'] = entity;
     return this.http.post(this.apiUrl, gvar);
   }
 
+  // Update driver
   update(entity: any): Observable<any> {
     var gvar = new GVAR();
     entity.PhoneNumber = entity.PhoneNumber.toString();
@@ -32,27 +36,8 @@ export class DriverService implements IService {
     return this.http.put(this.apiUrl, gvar);
   }
 
+  // Delete driver
   delete(entity: any): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${entity.DriverID}`);
-  }
-
-  getInfo(id: number): Observable<any> {
-    return new Observable();
-  }
-
-  getDetails(entity: any): Observable<any> {
-    return new Observable();
-  }
-
-  addVehicleInfo(entity: any): Observable<any> {
-    return new Observable();
-  }
-
-  updateVehicleInfo(entity: any): Observable<any> {
-    return new Observable();
-  }
-
-  deleteVehicleInfo(entity: any): Observable<any> {
-    return new Observable();
   }
 }

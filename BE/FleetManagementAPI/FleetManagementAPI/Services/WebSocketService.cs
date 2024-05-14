@@ -17,6 +17,8 @@ namespace FleetManagementAPI.Services
         {
             _serviceScopeFactory = serviceScopeFactory;
         }
+
+        // Handle incoming WebSocket connections
         public async Task HandleConnection(HttpContext context)
         {
             var webSocket = await context.WebSockets.AcceptWebSocketAsync();
@@ -30,6 +32,7 @@ namespace FleetManagementAPI.Services
 
                     await ReceiveMessage(webSocket, async (result, buffer) =>
                     {
+                        // If the message type is Text, deserialize the message and add it to the route history
                         if (result.MessageType == WebSocketMessageType.Text)
                         {
                             string message = Encoding.UTF8.GetString(buffer, 0, result.Count);
@@ -37,7 +40,7 @@ namespace FleetManagementAPI.Services
 
                             if (gvar == null)
                             {
-                                throw new ResourseNotFoundException("GVAR object is null");
+                                throw new Exception("GVAR object is null");
                             }
 
                             routeHistoryService.AddRouteHistory(gvar);
@@ -47,6 +50,8 @@ namespace FleetManagementAPI.Services
                             gvarMessage.DicOfDic["Tags"]["STS"] = "1";
                             await SendMessageToAllAsync(gvarMessage);
                         }
+
+                        // Close the connection if the message type is Close
                         else if (result.MessageType == WebSocketMessageType.Close)
                         {
                             string id = GetId(webSocket);
@@ -56,7 +61,8 @@ namespace FleetManagementAPI.Services
                     });
                 }
             }
-            catch (ResourseNotFoundException ex)
+            // If an exception is thrown, send a message to the client with the status code 0
+            catch (Exception ex)
             {
                 Console.WriteLine(ex);
                 GVAR gvar = new GVAR();
@@ -69,6 +75,7 @@ namespace FleetManagementAPI.Services
                     await webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None).ConfigureAwait(false);
                 }
             }
+            // Close the connection
             finally
             {
                 if (webSocket.State == WebSocketState.Open)
@@ -77,27 +84,35 @@ namespace FleetManagementAPI.Services
                 }
             }
         }
+
+        // Get a WebSocket connection by ID
         public WebSocket GetSocketById(string id)
         {
             return _sockets.FirstOrDefault(p => p.Key == id).Value;
         }
 
+        // Get all WebSocket connections
         public ConcurrentDictionary<string, WebSocket> GetAll()
         {
             return _sockets;
         }
 
+        // Get the ID of a WebSocket connection
         public string GetId(WebSocket socket)
         {
             return _sockets.FirstOrDefault(p => p.Value == socket).Key;
         }
 
+
+        // Add a WebSocket connection
         public string AddSocket(WebSocket socket)
         {
             string connId = Guid.NewGuid().ToString();
             _sockets.TryAdd(connId, socket);
             return connId;
         }
+
+        // Receive a message from a WebSocket connection
         public async Task ReceiveMessage(WebSocket socket, Func<WebSocketReceiveResult, byte[], Task> handleMessage)
         {
             var buffer = new byte[1024 * 4];
@@ -107,6 +122,8 @@ namespace FleetManagementAPI.Services
                 await handleMessage(result, buffer);
             }
         }
+
+        // Send a message to all WebSocket connections
         public async Task SendMessageToAllAsync(GVAR gvar)
         {
             foreach (var pair in _sockets)
@@ -117,6 +134,7 @@ namespace FleetManagementAPI.Services
             }
         }
 
+        // Remove a WebSocket connection
         public async Task RemoveSocket(string id)
         {
             if (_sockets.TryRemove(id, out var socket) && socket != null)
@@ -124,7 +142,5 @@ namespace FleetManagementAPI.Services
                                         statusDescription: "Closed by the WebSocketManager",
                                         cancellationToken: CancellationToken.None);
         }
-
-        private string GetConnectionId() => Guid.NewGuid().ToString();
     }
 }

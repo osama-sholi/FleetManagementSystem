@@ -15,6 +15,7 @@ namespace FleetManagementAPI.Controllers
             _vehicleService = vehicleService;
         }
 
+        // GET: api/Vehicles
         [HttpPost]
         public IActionResult AddVehicle([FromBody] GVAR gvar)
         {
@@ -34,6 +35,7 @@ namespace FleetManagementAPI.Controllers
             }
         }
 
+        // GET: api/Vehicles
         [HttpPut]
         public IActionResult UpdateVehicle([FromBody] GVAR gvar)
         {
@@ -53,6 +55,7 @@ namespace FleetManagementAPI.Controllers
             }
         }
 
+        // GET: api/Vehicles
         [HttpDelete("{id}")]
         public IActionResult DeleteVehicle(long id)
         {

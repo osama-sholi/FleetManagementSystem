@@ -1,0 +1,396 @@
+{
+	"info": {
+		"_postman_id": "2074aa85-b4d6-4d01-8821-8c28bc90bcf9",
+		"name": "Osama_FMS_Postman",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33819248"
+	},
+	"item": [
+		{
+			"name": "Driver",
+			"item": [
+				{
+					"name": "Get Drivers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5179/api/Drivers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5179",
+							"path": [
+								"api",
+								"Drivers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Driver",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"DicOfDic\": {\r\n        \"Tags\": {\r\n            \"DriverName\":\"Robert Smith\",\r\n            \"PhoneNumber\":\"9876543210\"\r\n        }\r\n    },\r\n    \"DicOfDt\":{}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5179/api/Drivers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5179",
+							"path": [
+								"api",
+								"Drivers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Driver",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"DicOfDic\": {\r\n        \"Tags\": {\r\n            \"DriverID\":\"2\",\r\n            \"DriverName\":\"Jackie Chan\",\r\n            \"PhoneNumber\":\"11111111\"\r\n        }\r\n    },\r\n    \"DicOfDt\":{}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5179/api/Drivers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5179",
+							"path": [
+								"api",
+								"Drivers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Driver",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5179/api/Drivers/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5179",
+							"path": [
+								"api",
+								"Drivers",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Geofences",
+			"item": [
+				{
+					"name": "Get Geofences",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get Circular Geofences",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get Rectangular Geofences",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get Polygon Geofences",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5179/api/Geofences/polygon",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5179",
+							"path": [
+								"api",
+								"Geofences",
+								"polygon"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "RouteHistory",
+			"item": [
+				{
+					"name": "Get Routes History",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5179/api/RoutesHistory/1/0/9999999999",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5179",
+							"path": [
+								"api",
+								"RoutesHistory",
+								"1",
+								"0",
+								"9999999999"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Route History",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"DicOfDic\": {\r\n        \"Tags\": {\r\n            \"VehicleID\" : \"1\",\r\n            \"VehicleDirection\":\"120\",\r\n            \"Status\" : \"1\",\r\n            \"VehicleSpeed\" : \"150\",\r\n            \"Address\" : \"something street\",\r\n            \"Latitude\" : \"100.50\",\r\n            \"Longitude\" : \"90.13\",\r\n            \"RecordTime\" : \"4123141\"\r\n        }\r\n    },\r\n    \"DicOfDt\":{}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5179/api/RoutesHistory",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5179",
+							"path": [
+								"api",
+								"RoutesHistory"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Vehicles",
+			"item": [
+				{
+					"name": "Add Vehicle",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"DicOfDic\": {\r\n        \"Tags\": {\r\n            \"VehicleNumber\" : \"3245\",\r\n            \"VehicleType\" : \"Van\",\r\n        }\r\n    },\r\n    \"DicOfDt\":{}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5179/api/Vehicles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5179",
+							"path": [
+								"api",
+								"Vehicles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Vehicle",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"DicOfDic\": {\r\n        \"Tags\": {\r\n            \"VehicleID\": \"1\",\r\n            \"VehicleNumber\" : \"32456\",\r\n            \"VehicleType\" : \"Truck\"\r\n        }\r\n    },\r\n    \"DicOfDt\":{}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5179/api/Vehicles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5179",
+							"path": [
+								"api",
+								"Vehicles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Vehicle",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5179/api/Vehicles/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5179",
+							"path": [
+								"api",
+								"Vehicles",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "VehiclesInfo",
+			"item": [
+				{
+					"name": "Get All Vehicles Info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5179/api/VehiclesInfo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5179",
+							"path": [
+								"api",
+								"VehiclesInfo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Vehicle Details",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Add Vehicle Info",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"DicOfDic\": {\r\n        \"Tags\": {\r\n            \"VehicleID\":\"3\",\r\n            \"DriverID\":\"2\",\r\n            \"PurchaseDate\":\"123\",\r\n            \"VehicleMake\":\"asd\",\r\n            \"VehicleModel\":\"qwe\"\r\n        }\r\n    },\r\n    \"DicOfDt\":{}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5179/api/VehiclesInfo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5179",
+							"path": [
+								"api",
+								"VehiclesInfo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Vehicle Info",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Web Socket",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

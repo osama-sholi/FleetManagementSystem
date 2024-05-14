@@ -51,7 +51,7 @@ namespace FleetManagementLibrary.Data.Repositories
         {
             // SQL query to get the following based on the VehicleID:
             // VehicleNumber from the Vehicles table
-            // Address, Status, Position(Latitude, Longitude), VehicleDirection, VehicleSpeed, RecordTime from the RouteHistory table
+            // Address, Status, Latitude, Longitude, VehicleDirection, VehicleSpeed, RecordTime from the RouteHistory table
             //  withing the given time range by joining the Vehicles with the records that has the record time between the start and end point epoch time
 
             string query =

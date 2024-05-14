@@ -24,8 +24,9 @@ namespace FleetManagementAPI.Services
             {
                 throw new ResourseNotFoundException("Vehicle info not found");
             }
-            gvar.DicOfDT["VehiclesInformations"] = new DataTable();
 
+            // Create a new data table
+            gvar.DicOfDT["VehiclesInformations"] = new DataTable();
             gvar.DicOfDT["VehiclesInformations"].Columns.AddRange(new DataColumn[]
             {
                 new DataColumn("VehicleNumber", typeof(string)),
@@ -40,6 +41,7 @@ namespace FleetManagementAPI.Services
                 new DataColumn("LastAddress", typeof(string))
             });
 
+            // Fill the data table with the data from the database
             var row = gvar.DicOfDT["VehiclesInformations"].NewRow();
             row["VehicleNumber"] = vehicleInfo.VehicleNumber;
             row["VehicleType"] = vehicleInfo.VehicleType;
@@ -65,11 +67,11 @@ namespace FleetManagementAPI.Services
 
             if (vehiclesInfo == null || vehiclesInfo.Count == 0)
             {
-                throw new ResourseNotFoundException("No vehicles info found");
+                throw new ResourseNotFoundException("No vehicles info found"); // Custom exception
             }
 
+            // Create a new data table
             gvar.DicOfDT["VehiclesInformations"] = new DataTable();
-
             gvar.DicOfDT["VehiclesInformations"].Columns.AddRange(new DataColumn[]
             {
                 new DataColumn("VehicleID", typeof(string)),
@@ -81,6 +83,7 @@ namespace FleetManagementAPI.Services
                 new DataColumn("LastPosition", typeof(string))
             });
 
+            // Fill the data table with the data from the database
             foreach (var vehicleInfo in vehiclesInfo)
             {
                 var row = gvar.DicOfDT["VehiclesInformations"].NewRow();
