@@ -26,8 +26,34 @@ Just run the start.bat file and that's it.
 What does the start.bat file do?
 * It runs the run.bat in the backend folder and the serve.bat in the frontend folder.
 * run.bat file checks and install the required packages for the backend and then run the backend server.
-* serve.bat file checks and install the required packages for the frontend and then run the frontend application.
+* serve.bat file checks and installs the required packages for the frontend and then run the frontend application.
 
 ## Postman Collection
-You can find the postman collection in the project folder. it's called 'osama_fms.postman_collection.json'.
+You can find the Postman collection in the project folder. it's called 'osama_fms.postman_collection.json'.
 You can import it to your postman and test the APIs.
+
+## Web Socket
+Since there is no frontend implementation for the web socket, and for some reason I can't export it using postman, here are the steps to test it out.
+1. Open Postman.
+2. Right-click the collection and add the WebSocket request
+3. Use this link "ws://localhost:5179/api/ws", you have to replace the domain if it's different on your side, and then click connect.
+4. Create a new WebSocket with the same link and connect to the server.
+5. Using one of the WebSockets send a GVAR JSON, something like this:
+```bash
+{
+    "DicOfDic": {
+        "Tags": {
+            "VehicleID" : "2",
+            "VehicleDirection": "123",
+            "Status" : "1",
+            "VehicleSpeed" : "123",
+            "RecordTime": "5123121",
+            "Address":"ada",
+            "Latitude": "21123",
+            "Longitude": "123"
+        }
+    },
+    "DicOfDt":{}
+}
+```
+6. Click send and check the other WebSocket connection, it should receive an acknowledgment GVAR object.
