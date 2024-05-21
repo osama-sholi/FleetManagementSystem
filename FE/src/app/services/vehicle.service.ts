@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, Subject, catchError, map } from 'rxjs';
 import { IService } from './IService';
 import { GVAR } from '../models/gvar.model';
 import { DriverService } from './driver.service';
+import { WebSocketSubject } from 'rxjs/webSocket';
 
 @Injectable({
   providedIn: 'root',
@@ -11,8 +12,42 @@ import { DriverService } from './driver.service';
 export class VehicleService implements IService {
   private apiUrl = 'http://localhost:5179/api/Vehicles';
   private infoApiUrl = 'http://localhost:5179/api/VehiclesInfo';
-  constructor(private http: HttpClient) {}
+  private wsUrl = 'ws://localhost:5179/api/ws';
+  private socket$: WebSocketSubject<any>;
+  public messages: Subject<any> = new Subject<any>();
+  constructor(private http: HttpClient) {
+    this.socket$ = new WebSocketSubject(this.wsUrl);
+    this.socket$
+      .asObservable()
+      .pipe(
+        catchError((error: any) => {
+          console.error(error);
+          var gvar = new GVAR();
+          gvar.DicOfDic['Tags'] = {};
+          gvar.DicOfDic['Tags']['STS'] = '0';
+          return this.http.post(this.wsUrl, gvar);
+        })
+      )
+      .subscribe((message) => {
+        let vehicle = this.mapMessageToVehicle(message);
+        this.messages.next(vehicle);
+      });
+  }
 
+  close() {
+    this.socket$.complete();
+  }
+
+  private mapMessageToVehicle(message: any): any {
+    var tags = message['DicOfDic']['Tags'];
+    return {
+      VehicleID: tags.VehicleID,
+      LastDirection: tags.VehicleDirection,
+      LastStatus: tags.Status,
+      LastAddress: tags.Address,
+      LastPosition: '(' + tags.Latitude + ',' + tags.Longitude + ')',
+    };
+  }
   // Get all vehicles
   getAll(): Observable<any> {
     return this.http.get<any>(this.infoApiUrl).pipe(

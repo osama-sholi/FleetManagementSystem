@@ -1,15 +1,28 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, Subject, map } from 'rxjs';
 import { IService } from './IService';
 import { GVAR } from '../models/gvar.model';
+import { WebSocketSubject } from 'rxjs/webSocket';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RouteHistoryService implements IService {
   private apiUrl = 'http://localhost:5179/api/RoutesHistory';
-  constructor(private http: HttpClient) {}
+  private wsUrl = 'ws://localhost:5179/api/ws';
+  private socket$: WebSocketSubject<any>;
+  private response$ = new Subject<any>();
+
+  constructor(private http: HttpClient) {
+    this.socket$ = new WebSocketSubject(this.wsUrl);
+
+    // Listen for a message from the WebSocket server
+    this.socket$.subscribe((message) => {
+      // Emit the message as the response
+      this.response$.next(message);
+    });
+  }
 
   // Get all route history for a vehicle
   getAll(entity: any): Observable<any> {
@@ -45,7 +58,11 @@ export class RouteHistoryService implements IService {
       date.getTime() / 1000
     ).toString();
 
-    return this.http.post(this.apiUrl, gvar);
+    // Send the GVAR object to the WebSocket
+    this.socket$.next(gvar);
+
+    // Return the response as an Observable
+    return this.response$.asObservable();
   }
 
   // Implementing IService interface

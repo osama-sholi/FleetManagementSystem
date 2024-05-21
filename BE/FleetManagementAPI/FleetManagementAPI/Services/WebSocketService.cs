@@ -45,10 +45,8 @@ namespace FleetManagementAPI.Services
 
                             routeHistoryService.AddRouteHistory(gvar);
 
-                            GVAR gvarMessage = new GVAR();
-                            gvarMessage.DicOfDic["Tags"] = new ConcurrentDictionary<string, string>();
-                            gvarMessage.DicOfDic["Tags"]["STS"] = "1";
-                            await SendMessageToAllAsync(gvarMessage);
+                            gvar.DicOfDic["Tags"]["STS"] = "1";
+                            await SendMessageToAllAsync(gvar);
                         }
 
                         // Close the connection if the message type is Close

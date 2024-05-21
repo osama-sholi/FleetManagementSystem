@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, OnInit } from '@angular/core';
+import { Component, Input, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -8,7 +8,6 @@ import { IService } from '../../services/IService';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { VehicleService } from '../../services/vehicle.service';
-import { GeofenceService } from '../../services/geofence.service';
 
 @Component({
   selector: 'app-data-table',
@@ -17,17 +16,38 @@ import { GeofenceService } from '../../services/geofence.service';
 })
 // I know, the class is too long, but this is for the reusability of the component, and it's impossible for me break it down into smaller components,
 // sure it could be better, but I'm not sure how to do it, so I'm leaving it as it is.
-export class DataTableComponent implements OnInit {
+export class DataTableComponent implements OnInit, OnDestroy {
   constructor(
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private router: Router,
-    private vehicleService: VehicleService,
-    private geofenceService: GeofenceService
+    private vehicleService: VehicleService
   ) {}
-
   ngOnInit() {
     this.getData();
+
+    if (this.entity === 'Vehicle') {
+      this.vehicleService.messages.subscribe((message) => {
+        // Find the index of the vehicle in the data array that corresponds to the vehicle in the message
+        let index = this.data.findIndex(
+          (v) => v.VehicleID === message.VehicleID
+        );
+
+        // If the vehicle is found, update it
+        if (index !== -1) {
+          this.data[index].LastDirection = message.LastDirection;
+          this.data[index].LastStatus = message.LastStatus;
+          this.data[index].LastAddress = message.LastAddress;
+          this.data[index].LastPosition = message.LastPosition;
+        }
+
+        this.updateTable();
+      });
+    }
+  }
+
+  ngOnDestroy() {
+    this.vehicleService.close();
   }
 
   data: any[] = [];
