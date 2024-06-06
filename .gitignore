@@ -79,7 +79,6 @@ artifacts/
 *.pdb
 *.cmd
 *.sh
-*.bat
 *.user
 *.vsconfig
 *.log
