@@ -21,6 +21,19 @@ or by using phpMyAdmin:
 3. Click on the "Import" tab.
 4. Choose the dump file and click on "Go".
 
+### Prerequisites
+Before you can run this application, you need to install the following:
+
+1. **.NET Core SDK**: This is required to run the .NET Core backend. You can download it from the [.NET Core official website](https://dotnet.microsoft.com/download). Please install the version that matches the one specified in the project file.
+
+2. **Node.js and npm**: These are required to install the necessary packages for the Angular frontend and to serve the frontend application. You can download Node.js, which includes npm, from the [Node.js official website](https://nodejs.org/en/download/).
+
+3. **Angular CLI**: This is required to serve the Angular frontend. After installing Node.js and npm, you can install Angular CLI globally by running the following command in your terminal:
+
+```bash
+npm install -g @angular/cli
+```
+
 ### Run the application
 Just run the start.bat file and that's it.
 What does the start.bat file do?
