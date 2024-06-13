@@ -1,12 +1,12 @@
-cd FPro
-cd FPro
+cd FleetManagementLibrary
+cd FleetManagementLibrary
 dotnet restore && dotnet build
 cd ..
 cd ..
 
-cd FleetManagementLibrary
-cd FleetManagementLibrary
-dotnet restore && msbuild
+cd FPro
+cd FPro
+dotnet restore && dotnet build
 cd ..
 cd ..
 
