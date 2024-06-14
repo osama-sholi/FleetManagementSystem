@@ -5,9 +5,7 @@ cd ..
 cd ..
 
 cd FleetManagementLibrary
-cd FleetManagementLibrary
-dotnet restore && dotnet build
-cd ..
+nuget restore && dotnet build
 cd ..
 
 cd FleetManagementAPI

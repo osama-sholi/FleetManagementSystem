@@ -28,12 +28,13 @@ Before you can run this application, you need to install the following:
 
 2. **Node.js and npm**: These are required to install the necessary packages for the Angular frontend and to serve the frontend application. You can download Node.js, which includes npm, from the [Node.js official website](https://nodejs.org/en/download/).
 
-3. **Angular CLI**: This is required to serve the Angular frontend. After installing Node.js and npm, you can install Angular CLI globally by running the following command in your terminal:
+3. **NuGet Package CLI**: This is required to install the necessary packages for the .NET Framework backend using the `start.bat`. You can download it from the [NuGet official website](https://www.nuget.org/downloads). After downloading the CLI, you need to add it to your system's PATH.(Or you can just run the backend using Visual Studio)
+
+4. **Angular CLI**: This is required to serve the Angular frontend. After installing Node.js and npm, you can install Angular CLI globally by running the following command in your terminal:
 
 ```bash
 npm install -g @angular/cli
 ```
-
 ### Run the application
 Just run the start.bat file and that's it.
 What does the start.bat file do?
