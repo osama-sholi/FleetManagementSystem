@@ -6,7 +6,7 @@ cd ..
 
 cd FleetManagementLibrary
 cd FleetManagementLibrary
-dotnet restore && msbuild
+dotnet restore && dotnet build
 cd ..
 cd ..
 
